@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Velqor</title>
+<meta name="description" content="Velqor – workout, cardio and nutrition tracker">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22pg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%232d2b78%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23110e33%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2215%22%20fill%3D%22url%28%23pg%29%22/%3E%3Cpath%20d%3D%22M35.75%2045.25L31%2050L12%2031L31%2012L50%2031L45.25%2035.75%22%20fill%3D%22none%22%20stroke%3D%22%23ff7a45%22%20stroke-width%3D%225.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3Cpath%20d%3D%22M25.5%2026L31%2037L36.5%2026%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%224.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3Cpath%20d%3D%22M37%2037L52%2052%22%20fill%3D%22none%22%20stroke%3D%22%23ffc247%22%20stroke-width%3D%225.5%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;color-scheme:light dark;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#e9ebef;--card:#fff;--c2:#f3f4f7;--tx:#15161b;--mu:#5b6270;--ac:#ff5f1f;--ac2:#1f1b5e;--bd:#cbd0d8;--ok:#1f9d55;--bad:#d93636;--fd:"Barlow Condensed","Roboto Condensed","Arial Narrow",system-ui,sans-serif;--fb:Figtree,system-ui,-apple-system,"Segoe UI",sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#100e2b;--card:#191640;--c2:#221f52;--tx:#f1f0fb;--mu:#9c9ac4;--bd:#2f2c66;--ac:#ff6a2b;--ac2:#2b2680;--ok:#38c172}}
+:root[data-theme="dark"]{--bg:#100e2b;--card:#191640;--c2:#221f52;--tx:#f1f0fb;--mu:#9c9ac4;--bd:#2f2c66;--ac:#ff6a2b;--ac2:#2b2680;--ok:#38c172}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 var(--fb);padding-bottom:88px}
+main{max-width:640px;margin:0 auto;padding:12px 16px}
+h1{font:700 30px/1 var(--fd);letter-spacing:.3px;margin:0}
+h2{font:600 22px/1.1 var(--fd);margin:0 0 10px;color:var(--tx)}
+.card{background:transparent;border:0;border-top:1px solid var(--bd);border-radius:0;padding:18px 0 8px;margin:0 0 6px}
+section>.card:first-child{border-top:0;padding-top:4px}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+input,select{font:inherit;min-height:44px;padding:0 12px;border:1px solid var(--bd);border-radius:10px;background:var(--card);color:var(--tx);min-width:0}
+button{font-family:inherit;transition:transform .08s}button:active{transform:scale(.97)}
+button.b{background:var(--ac);color:#fff;border:0;border-radius:12px;font-weight:700;font-size:15px;min-height:44px;padding:0 16px;cursor:pointer}
+button.g{background:var(--card);color:var(--tx);border:1px solid var(--bd)}
+.row{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}.row>*{flex:1 1 70px}
+.it{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-top:1px solid var(--bd)}.it:first-of-type{border-top:0}
+.mu{color:var(--mu);font-size:13px}
+.x{background:none;border:0;color:var(--mu);font-size:18px;padding:8px 12px}
+.big{font:700 34px/1 var(--fd)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px}.stat .mu{margin-bottom:4px}
+.seg{display:flex;gap:4px;margin-bottom:12px;background:var(--c2);padding:4px;border-radius:14px}.seg button.b{flex:1;background:var(--tx);color:var(--bg);border-radius:10px;min-height:38px}.seg button.g{background:transparent;color:var(--mu);border:0}
+.bar{height:10px;background:var(--c2);border:1px solid var(--bd);border-radius:6px;overflow:hidden;margin:8px 0}.bar i{display:block;height:100%;background:var(--ac)}.bar i.over{background:var(--bad)}
+.chart{overflow-x:auto}
+img.pv{max-width:100%;max-height:220px;border-radius:14px;margin:8px 0;display:block}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--bd);padding-bottom:env(safe-area-inset-bottom,0px);z-index:10}
+nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 2px 8px;border:0;background:none;color:var(--mu);font:600 11px var(--fb)}
+nav button.on{color:var(--ac);box-shadow:inset 0 3px 0 var(--ac)}
+#lang{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));right:12px;z-index:30;min-height:34px;border-radius:999px;padding:0 12px;font-size:13px}
+.hero{background:var(--ac2);color:#fff;border:0;border-radius:26px;padding:20px 20px 18px;margin:4px 0 20px}
+.hero h2{font:600 15px var(--fb);color:rgba(255,255,255,.72);margin:0 0 6px}
+.hero .name{font:700 42px/1 var(--fd);letter-spacing:.2px;margin-bottom:8px;word-break:break-word}
+.hero .mu{color:rgba(255,255,255,.72);font-size:14px}
+.hero-in{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.plate-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;flex:none;padding:12px 12px 0;font-size:13px;font-weight:600}
+.plate{width:84px;height:84px;border-radius:50%;border:0;background:var(--ac);color:#fff;font-size:28px;cursor:pointer;box-shadow:0 0 0 6px var(--ac2),0 0 0 9px rgba(255,255,255,.4)}
+#sug{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}#sug button{padding:6px 12px;font-weight:500;min-height:34px}
+#ov{position:fixed;inset:0;z-index:20;background:var(--bg);overflow-y:auto;padding:calc(50px + env(safe-area-inset-top,0px)) 16px calc(28px + env(safe-area-inset-bottom,0px))}#ov>div{max-width:640px;margin:0 auto}
+#ov .card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;margin-bottom:12px}
+.chip{font:inherit;font-size:13px;min-height:34px;padding:0 12px;border:1px solid var(--bd);border-radius:999px;background:var(--card);color:var(--tx);cursor:pointer}.chip.on{background:var(--tx);border-color:var(--tx);color:var(--bg)}
+.tm{font:700 64px/1 var(--fd);text-align:center;font-variant-numeric:tabular-nums;padding:6px 0}
+.setr{display:flex;gap:8px;align-items:center;margin:6px 0}.setr input{width:0;flex:1;text-align:center;font-weight:600}.setr button.b{flex:none;min-width:56px;padding:0}.setr button.b:not(.g){background:var(--ok)}.setr.dn{opacity:.7}
+.setr .st{flex:none;width:42px;min-height:44px;padding:0;font-size:20px;border-radius:12px}
+.hide{display:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+<div style="display:flex;align-items:center;gap:10px;padding:8px 0 16px"><span id="bic" style="display:inline-flex;width:36px;height:36px;flex:none"></span><h1>Velqor</h1><select id="lang" aria-label="Language"><option value="fi">Suomi</option><option value="sv">Svenska</option><option value="en">English</option></select></div>
+
+<section id="t-train" class="hide">
+  <div class="card">
+    <h2>Lisää sarja</h2>
+    <div class="row"><input type="date" id="wd"><input id="we" autocomplete="off" placeholder="Liike (esim. Penkkipunnerrus)" style="flex:2 1 160px"></div>
+    <div id="sug"></div>
+    <div class="row"><button class="b g" id="eqb">📷 Tunnista liike/laite kuvasta</button><input type="file" id="eqf" accept="image/*" capture="environment" class="hide"></div>
+    <div id="eqres" class="mu"></div>
+    <datalist id="exl"></datalist>
+    <div class="row"><input id="ws" type="number" inputmode="numeric" placeholder="Sarjat"><input id="wr" type="number" inputmode="numeric" placeholder="Toistot"><input id="wk" type="number" inputmode="decimal" placeholder="Paino kg"></div>
+    <div class="row"><button class="b" id="wadd">Tallenna</button></div>
+  </div>
+  <div class="card"><h2>Cardio ja muut lajit</h2>
+    <div class="row"><input type="date" id="cd"><select id="csp"></select></div>
+    <div class="row"><input id="cm" type="number" inputmode="numeric" placeholder="Kesto min"><input id="ck" type="number" inputmode="decimal" placeholder="Matka km"><button class="b" id="cadd">Tallenna</button></div>
+    <div id="clist"></div>
+    <hr style="border:0;border-top:1px solid var(--bd);margin:12px 0">
+    <button class="b g" id="ahb">🍎 Tuo Apple Healthistä</button>
+    <input type="file" id="ahf" accept=".zip,.xml,application/zip,text/xml" class="hide">
+    <div class="mu" id="ahres" style="margin-top:6px"></div>
+    <div class="mu">Health-sovellus → profiilikuva → Vie kaikki terveystiedot. Valitse tähän tuotu export.zip.</div></div>
+  <div class="card"><h2>Viimeisimmät</h2><div id="wlist"></div></div>
+</section>
+
+<section id="t-food" class="hide">
+  <div class="card">
+    <div class="row" style="align-items:center"><h2 id="fdt" style="margin:0;flex:1 1 auto">Tänään</h2><input type="date" id="fd" style="flex:0 0 150px"></div>
+    <div style="margin-top:8px"><span class="big" id="kt">0</span> <span class="mu">/ <input id="goal" type="number" style="width:80px;padding:4px"> kcal</span></div>
+    <div class="bar"><i id="kbar" style="width:0"></i></div>
+    <div class="mu" id="kleft"></div><div class="mu" id="kmac"></div>
+  </div>
+  <div class="card"><h2>Makrot</h2>
+    <div class="seg" id="mper"><button class="b" data-m="d">Päivä</button><button class="b g" data-m="w">Viikko</button><button class="b g" data-m="m">Kuukausi</button></div>
+    <div id="mpie"></div>
+  </div>
+  <div class="card"><h2>Kalorilaskuri</h2>
+    <div id="frec" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px"></div>
+    <input id="fs" list="fdl" autocomplete="off" placeholder="Hae tai valitse tuote…" style="width:100%;margin-bottom:6px"><datalist id="fdl"></datalist>
+    <div class="row"><input id="fg" type="number" inputmode="decimal" placeholder="Määrä" value="100"><select id="fu"></select></div>
+    <div class="mu" id="fprev" style="margin-bottom:6px"></div>
+    <div class="row"><button class="b" id="fadd">Lisää päivään</button><button class="b g" id="fpb">＋ Uusi oma tuote</button></div>
+    <div id="fpanel" class="hide" style="margin-top:8px;border-top:1px solid var(--bd);padding-top:8px">
+      <div class="mu" style="margin-bottom:6px">Arvot per 100 g tai 100 ml</div>
+      <div class="row"><input id="fpn" placeholder="Tuotteen nimi" style="flex:2 1 150px"></div>
+      <div class="row"><input id="fpk" type="number" inputmode="decimal" placeholder="kcal"><input id="fpp" type="number" inputmode="decimal" placeholder="Proteiini g"><input id="fpc" type="number" inputmode="decimal" placeholder="Hiilihydraatit g"><input id="fpf" type="number" inputmode="decimal" placeholder="Rasva g"></div>
+      <div class="row"><select id="fpl"><option value="g">Kiinteä (g)</option><option value="ml">Neste (ml)</option></select><input id="fpw" type="number" inputmode="decimal" placeholder="Yhden kappaleen paino g (valinnainen)" style="flex:2 1 150px"></div>
+      <div class="row"><button class="b" id="fpsave">Tallenna tuote</button></div>
+      <div id="fplist"></div>
+    </div>
+  </div>
+  <div class="card"><h2>Ruokapäiväkirja</h2><div id="flist"></div></div>
+  <div class="card">
+    <h2>📷 Arvioi kalorit kuvasta</h2>
+    <input type="file" id="ph" accept="image/*" capture="environment" class="hide">
+    <button class="b" id="phb">Ota / valitse kuva annoksesta</button>
+    <img id="pv" class="pv hide">
+    <div id="pres" class="mu"></div>
+    <hr style="border:0;border-top:1px solid var(--bd);margin:12px 0">
+    <h2>📦 Pakkaus / ravintosisältö</h2>
+    <button class="b" id="pkb">Ota kuva pakkauksesta tai viivakoodista</button>
+    <input type="file" id="pkf" accept="image/*" capture="environment" class="hide">
+    <div id="pkres" class="mu" style="margin-top:6px"></div>
+  </div>
+</section>
+
+<section id="t-stats" class="hide">
+  <div class="card" id="wkc"></div>
+  <div class="seg" id="per"><button class="b" data-p="w">Viikko</button><button class="b g" data-p="m">Kuukausi</button><button class="b g" data-p="y">Vuosi</button></div>
+  <div class="card"><h2 id="sh">Yhteenveto</h2><div class="grid" id="sum"></div></div>
+  <div class="card"><h2>Treenivolyymi (kg)</h2><div class="chart" id="c1"></div></div>
+  <div class="card"><h2>Kalorit / päivä keskimäärin</h2><div class="chart" id="c2"></div></div>
+  <div class="card"><h2>Cardio (min)</h2><div class="chart" id="c4"></div></div>
+  <div class="card"><h2>Liikkeen eteneminen</h2><select id="exs" style="width:100%;margin-bottom:8px"></select><div class="chart" id="c3"></div><div class="mu" id="pr"></div></div>
+  <div class="card"><h2>Ennätykset</h2><div id="recs"></div></div>
+  <div class="card"><h2>Vie kuva</h2>
+   <div class="row"><select id="xp"><option value="d">Päivä</option><option value="w" selected>Viikko</option><option value="m">Kuukausi</option><option value="y">Vuosi</option></select><button class="b g" id="xbg">🖼️ Oma taustakuva</button><input type="file" id="xbgf" accept="image/*" class="hide"></div>
+   <div class="row mu" id="xo" style="gap:12px"><label><input type="checkbox" value="t" checked> Treenit</label><label><input type="checkbox" value="c" checked> Cardio</label><label><input type="checkbox" value="f" checked> Ruoka</label><label><input type="checkbox" value="b"> Paino</label><label><input type="checkbox" value="r" checked> Ennätykset</label></div>
+   <div class="row"><button class="b" id="xmk">Luo kuva</button><button class="b g hide" id="xsv">Tallenna</button></div>
+   <img id="xim" class="pv hide" alt="">
+  </div>
+</section>
+<section id="t-prog"><div id="homebox"></div><div id="progbox"></div></section>
+<section id="t-hist" class="hide"><div class="card"><h2>Treenihistoria</h2><select id="hx" style="width:100%;margin-bottom:6px"></select><div id="hlist"></div></div></section>
+<section id="t-prof" class="hide">
+  <div class="card"><h2>Omat tiedot</h2>
+   <div class="row"><input id="pn" placeholder="Nimi"></div>
+   <div class="row"><select id="ps"><option value="">Sukupuoli</option><option value="m">Mies</option><option value="f">Nainen</option><option value="o">Muu</option></select><input id="phh" type="number" inputmode="numeric" placeholder="Pituus cm"></div>
+   <div class="mu" id="pinfo"></div>
+  </div>
+  <div class="card"><h2>Painonseuranta</h2>
+   <div class="row"><input type="date" id="bd"><input id="bk" type="number" inputmode="decimal" step="0.1" placeholder="Paino kg"><button class="b" id="badd">Tallenna</button></div>
+   <div class="grid" id="bsum" style="margin-bottom:8px"></div>
+   <div class="chart" id="bc"></div>
+   <div id="blist"></div>
+  </div>
+</section>
+</main>
+
+<div id="ov" class="hide"></div>
+<nav id="nav"><button data-t="prog" class="on"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Etusivu</span></button><button data-t="train"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8v8M8 12h8"/></svg><span>Kirjaus</span></button><button data-t="food"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v7a2 2 0 0 0 4 0V3M9 12v9M17 3c-2.5 2-2.5 7 0 9v9"/></svg><span>Ruoka</span></button><button data-t="stats"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V11M12 20V4M19 20v-6"/></svg><span>Tilastot</span></button><button data-t="hist"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Historia</span></button><button data-t="prof"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span>Profiili</span></button></nav>
+
+<script>
+// Standalone build: Claude-hosted features (photo AI, file save API) are optional.
+const HOSTED=typeof claude!=="undefined";
+const $=id=>document.getElementById(id);
+let S={w:[],f:[],goal:2200},per="w",exSel="";
+try{const r=localStorage.getItem("treeniseuranta");if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+const save=()=>{try{localStorage.setItem("treeniseuranta",JSON.stringify(S))}catch(e){}};
+const TR={sv:{"🏋️ Treeniseuranta":"🏋️ Träningslogg","Treenit":"Pass","Ruoka":"Mat","Tilastot":"Statistik","Lisää sarja":"Lägg till set","Viimeisimmät":"Senaste","Tänään":"Idag","📷 Arvioi kalorit kuvasta":"📷 Uppskatta kalorier från foto","Kalorilaskuri":"Kalorikalkylator","Tämän päivän ruoat":"Dagens mat","Treenivolyymi (kg)":"Träningsvolym (kg)","Kalorit / päivä keskimäärin":"Kalorier / dag i snitt","Liikkeen eteneminen":"Övningens utveckling","Tallenna":"Spara","Ota / valitse kuva annoksesta":"Ta / välj en bild på måltiden","Lisää päivään":"Lägg till idag","Viikko":"Vecka","Kuukausi":"Månad","Vuosi":"År","Liike (esim. Penkkipunnerrus)":"Övning (t.ex. Bänkpress)","Sarjat":"Set","Toistot":"Reps","Paino kg":"Vikt kg","Grammaa":"Gram","tai oma ruoka":"eller egen mat","Täytä liike, sarjat ja toistot":"Fyll i övning, set och reps","Ei vielä treenejä. Lisää ensimmäinen yllä.":"Inga pass ännu. Lägg till det första ovan.","Valitse ruoka tai anna nimi ja kalorit":"Välj en mat eller ange namn och kalorier","Valitse ruoka…":"Välj mat…","Jäljellä":"Kvar","Yli tavoitteen":"Över målet","Ei vielä ruokia tänään.":"Ingen mat ännu idag.","Analysoidaan kuvaa…":"Analyserar bilden…","Kuva-analyysi ei ole käytettävissä tässä näkymässä. Käytä kalorilaskuria.":"Bildanalys är inte tillgänglig här. Använd kalorikalkylatorn.","Kuvien analysointi ei ole käytössä. Käytä kalorilaskuria.":"Bildanalys är inte aktiverad. Använd kalorikalkylatorn.","Kuvasta ei löytynyt ruokaa.":"Ingen mat hittades i bilden.","Arvio on suuntaa-antava.":"Uppskattningen är ungefärlig.","P":"P","H":"K","R":"F","Lisätty ✓":"Tillagd ✓","Arviointi epäonnistui":"Uppskattningen misslyckades","lupa evätty":"behörighet nekad","Yritä uudelleen.":"Försök igen.","Treenipäivät":"Träningsdagar","Sarjoja":"Set","Volyymi":"Volym","Kcal/päivä ka.":"Kcal/dag snitt","Yhteenveto":"Sammanfattning","tämä viikko":"denna vecka","tämä kuukausi":"denna månad","tämä vuosi":"detta år","Tarvitaan vähintään kaksi kirjausta tästä liikkeestä.":"Minst två loggningar av övningen behövs.","Ei liikkeitä":"Inga övningar","Ennätyspaino":"Rekordvikt","arvioitu 1RM":"beräknad 1RM","parhaat painot / jakso":"bästa vikter / period","vk":"v","Profiili":"Profil","Omat tiedot":"Mina uppgifter","Painonseuranta":"Viktuppföljning","Nimi":"Namn","Sukupuoli":"Kön","Pituus cm":"Längd cm","Mies":"Man","Nainen":"Kvinna","Muu":"Annat","Hei":"Hej","alipaino":"undervikt","normaali":"normalvikt","ylipaino":"övervikt","merkittävä ylipaino":"fetma","Anna pituus ja paino nähdäksesi BMI:n.":"Ange längd och vikt för att se BMI.","Nykyinen paino":"Nuvarande vikt","Muutos alusta":"Förändring sedan start","Muutos 30 pv":"Förändring 30 d","Tarvitaan vähintään kaksi painokirjausta.":"Minst två viktloggningar behövs.","Anna paino kiloina":"Ange vikt i kilo","Ohjelma":"Program","Cardio ja muut lajit":"Kondition och andra sporter","Kesto min":"Tid min","Matka km":"Distans km","Anna kesto minuutteina":"Ange tid i minuter","Samat lihasryhmät":"Samma muskelgrupper","Cardio (min)":"Kondition (min)","Cardio (kcal)":"Kondition (kcal)","Ohjelmasuositus":"Programförslag","Lihasmassa":"Muskelmassa","Voima":"Styrka","Yleiskunto":"Allmän kondition","2–3 treeniä/vk":"2–3 pass/vecka","4 treeniä/vk":"4 pass/vecka","5+ treeniä/vk":"5+ pass/vecka","Aloittelija":"Nybörjare","Kokenut":"Erfaren","Aloita ohjelma":"Starta programmet","Kaikki ohjelmat":"Alla program","Valitse":"Välj","Seuraava treeni":"Nästa pass","viimeksi":"senast","Päätä treeni":"Avsluta passet","Lopeta ohjelma":"Avsluta programmet","Koko vartalo 3×/vk":"Helkropp 3×/vecka","Ylä-/alavartalo 4×/vk":"Över-/underkropp 4×/vecka","Työntö–veto–jalat":"Push–pull–ben","Voima 5×5":"Styrka 5×5","Aloittelijalle: kolme kokovartalotreeniä viikossa.":"För nybörjare: tre helkroppspass i veckan.","Neljä treeniä viikossa: ylä- ja alavartalo vuorotellen.":"Fyra pass i veckan: överkropp och underkropp varvat.","Kokeneelle: 5–6 treeniä viikossa, kierto työntö, veto ja jalat.":"För erfarna: 5–6 pass i veckan, push, pull och ben i cykel.","Perusliikkeet raskaasti: kolme treeniä viikossa, A ja B vuorotellen.":"Baslöften tungt: tre pass i veckan, A och B varvat.","Tavoitteena voima: raskaat perusliikkeet ja selkeä eteneminen.":"Målet är styrka: tunga baslöften och tydlig progression.","2–3 treeniin viikossa kokovartalotreeni on tehokkain.":"Med 2–3 pass i veckan är helkroppspass mest effektivt.","Treenaat usein ja olet kokenut: työntö–veto–jalat-jako sopii.":"Du tränar ofta och är erfaren: push–pull–ben passar.","4 treeniä viikossa: ylä-/alavartalojako antaa hyvän palautumisen.":"4 pass i veckan: över-/underkroppsdelning ger bra återhämtning.","Treeni":"Pass","Ylävartalo":"Överkropp","Alavartalo":"Underkropp","Työntö":"Push","Veto":"Pull","Jalat":"Ben","📷 Tunnista liike/laite kuvasta":"📷 Identifiera övning/maskin från foto","Liikettä ei tunnistettu.":"Övningen kunde inte identifieras.","Ota kuva pakkauksesta tai viivakoodista":"Ta en bild på förpackningen eller streckkoden","📦 Pakkaus / ravintosisältö":"📦 Förpackning / näringsinnehåll","Ravintosisältöä ei löytynyt kuvasta. Kokeile ottaa taulukko lähempää.":"Hittade ingen näringsinformation. Ta bilden närmare tabellen.","Pakkaus":"Förpackning","toistoa":"reps","Ei vielä ennätyksiä.":"Inga rekord ännu.","Ennätykset":"Rekord","Vie kuva":"Exportera bild","Päivä":"Dag","🖼️ Oma taustakuva":"🖼️ Egen bakgrundsbild","Luo kuva":"Skapa bild","Paino":"Vikt","Cardio":"Kondition","Tehty Velqor-sovelluksella":"Skapad med Velqor","Tallennus ei ole käytettävissä. Paina kuvaa pitkään ja tallenna se.":"Sparande är inte tillgängligt. Tryck länge på bilden och spara.","Etusivu":"Hem","Kirjaus":"Logg","🍎 Tuo Apple Healthistä":"🍎 Importera från Apple Hälsa","Health-sovellus → profiilikuva → Vie kaikki terveystiedot. Valitse tähän tuotu export.zip.":"Hälsa-appen → profilbild → Exportera all hälsodata. Välj export.zip här.","Luetaan…":"Läser…","Tuotu":"Importerade","Tiedoston luku epäonnistui. Valitse Applen vientitiedosto (export.zip tai export.xml).":"Kunde inte läsa filen. Välj Apples exportfil (export.zip eller export.xml).","käynnissä":"pågår","Jatka treeniä":"Fortsätt passet","Aloita treeni":"Starta passet","Ei suunniteltua treeniä tälle päivälle.":"Inget planerat pass idag.","Treeniviikko":"Träningsvecka","Lepo":"Vila","Omat treenit":"Mina pass","Ei vielä treenejä.":"Inga pass ännu.","Uusi treeni":"Nytt pass","Luo treeniviikko":"Skapa träningsvecka","päivää viikossa":"dagar i veckan","Koko keho":"Hela kroppen","Rinta":"Bröst","Selkä":"Rygg","Olkapäät":"Axlar","Kädet":"Armar","Keskivartalo":"Bålen","Luo viikko":"Skapa vecka","Voit muokata luotuja treenejä jälkeenpäin.":"Du kan redigera passen efteråt.","tauko":"paus","sarja":"set","Sarja":"Set","Valmis":"Redo","Sarja käynnissä":"Set pågår","Tauko":"Paus","suositus":"rekommendation","Tauko ohi – seuraava sarja":"Pausen slut – nästa set","Lopeta treeni":"Avsluta passet","Takaisin":"Tillbaka","Treeni valmis":"Passet klart","Sulje":"Stäng","Uusi ennätys":"Nytt rekord","Muokkaa treeniä":"Redigera pass","Treenin nimi":"Passets namn","Voimatreeni":"Styrkepass","Lisää liike":"Lägg till övning","Peruuta":"Avbryt","Tämä viikko":"Den här veckan","viime viikkoon verrattuna":"mot förra veckan","Toista edellinen":"Upprepa föregående","Makrot":"Makron","Ruokapäiväkirja":"Matdagbok","Hae tai valitse tuote…":"Sök eller välj produkt…","Määrä":"Mängd","＋ Uusi oma tuote":"＋ Ny egen produkt","Arvot per 100 g tai 100 ml":"Värden per 100 g eller 100 ml","Tuotteen nimi":"Produktnamn","Proteiini g":"Protein g","Hiilihydraatit g":"Kolhydrater g","Rasva g":"Fett g","Kiinteä (g)":"Fast (g)","Neste (ml)":"Vätska (ml)","Yhden kappaleen paino g (valinnainen)":"Vikt per styck g (valfritt)","Tallenna tuote":"Spara produkt","Valitse tuote ja anna määrä":"Välj produkt och ange mängd","Anna tuotteen nimi ja kalorit":"Ange produktnamn och kalorier","Tuotetta ei löytynyt. Luo se omaksi tuotteeksi.":"Produkten hittades inte. Skapa den som egen produkt.","kpl":"st","Viimeksi käytetyt":"Senast använda","Ei vielä kirjauksia tälle päivälle.":"Inga loggningar ännu för dagen.","Proteiini":"Protein","Hiilihydraatit":"Kolhydrater","Rasva":"Fett","Yhteensä":"Totalt","ka.":"snitt","pv":"dag","kirjausta ilman makrotietoja":"loggar utan makrodata","Ei vielä kirjauksia tälle jaksolle.":"Inga loggningar ännu för perioden.","Tuote tallennettu ✓":"Produkt sparad ✓","Tallenna omaksi tuotteeksi":"Spara som egen produkt","Historia":"Historik","Treenihistoria":"Passhistorik","Kaikki liikkeet":"Alla övningar","liikettä":"övningar","Liikkeitä":"Övningar","sarjaa":"set","Näytä lisää":"Visa fler","Ei vielä tallennettuja treenejä.":"Inga sparade pass ännu.","Vapaa kirjaus":"Fri loggning","Tallenna pohjaksi":"Spara som mall","Tallennettu ✓":"Sparat ✓","Vahvista poisto":"Bekräfta borttagning","Avaa historiasta":"Öppna i historiken","Valmiit ohjelmat":"Färdiga program","Lepopäivä":"Vilodag","Aloita luomalla ensimmäinen treeni tai koko treeniviikko.":"Börja med att skapa ditt första pass eller en hel träningsvecka.","Muokkaa viikkoa":"Redigera veckan","Poista treeni":"Ta bort pass","Hauis":"Biceps","Ojentajat":"Triceps","Pakarat":"Rumpa","Etureidet":"Framsida lår","Takareidet":"Baksida lår","Pohkeet":"Vader","Lihasryhmä":"Muskelgrupp","valinnainen":"valfritt","Ei cardiota":"Ingen kondition","Lisää vähintään yksi liike tai cardio":"Lägg till minst en övning eller kondition"},
+en:{"🏋️ Treeniseuranta":"🏋️ Workout Tracker","Treenit":"Workouts","Ruoka":"Food","Tilastot":"Stats","Lisää sarja":"Add set","Viimeisimmät":"Recent","Tänään":"Today","📷 Arvioi kalorit kuvasta":"📷 Estimate calories from a photo","Kalorilaskuri":"Calorie calculator","Tämän päivän ruoat":"Today's food","Treenivolyymi (kg)":"Training volume (kg)","Kalorit / päivä keskimäärin":"Average calories / day","Liikkeen eteneminen":"Exercise progress","Tallenna":"Save","Ota / valitse kuva annoksesta":"Take / choose a photo of your meal","Lisää päivään":"Add to today","Viikko":"Week","Kuukausi":"Month","Vuosi":"Year","Liike (esim. Penkkipunnerrus)":"Exercise (e.g. Bench press)","Sarjat":"Sets","Toistot":"Reps","Paino kg":"Weight kg","Grammaa":"Grams","tai oma ruoka":"or custom food","Täytä liike, sarjat ja toistot":"Fill in exercise, sets and reps","Ei vielä treenejä. Lisää ensimmäinen yllä.":"No workouts yet. Add your first above.","Valitse ruoka tai anna nimi ja kalorit":"Choose a food or enter a name and calories","Valitse ruoka…":"Choose food…","Jäljellä":"Remaining","Yli tavoitteen":"Over goal by","Ei vielä ruokia tänään.":"No food yet today.","Analysoidaan kuvaa…":"Analyzing photo…","Kuva-analyysi ei ole käytettävissä tässä näkymässä. Käytä kalorilaskuria.":"Photo analysis isn't available here. Use the calculator.","Kuvien analysointi ei ole käytössä. Käytä kalorilaskuria.":"Photo analysis isn't enabled. Use the calculator.","Kuvasta ei löytynyt ruokaa.":"No food found in the photo.","Arvio on suuntaa-antava.":"The estimate is approximate.","P":"P","H":"C","R":"F","Lisätty ✓":"Added ✓","Arviointi epäonnistui":"Estimate failed","lupa evätty":"permission denied","Yritä uudelleen.":"Try again.","Treenipäivät":"Workout days","Sarjoja":"Sets","Volyymi":"Volume","Kcal/päivä ka.":"Avg kcal/day","Yhteenveto":"Summary","tämä viikko":"this week","tämä kuukausi":"this month","tämä vuosi":"this year","Tarvitaan vähintään kaksi kirjausta tästä liikkeestä.":"At least two entries for this exercise are needed.","Ei liikkeitä":"No exercises","Ennätyspaino":"Best weight","arvioitu 1RM":"estimated 1RM","parhaat painot / jakso":"best weights / period","vk":"wk","Profiili":"Profile","Omat tiedot":"My details","Painonseuranta":"Weight tracking","Nimi":"Name","Sukupuoli":"Sex","Pituus cm":"Height cm","Mies":"Male","Nainen":"Female","Muu":"Other","Hei":"Hi","alipaino":"underweight","normaali":"normal","ylipaino":"overweight","merkittävä ylipaino":"obese","Anna pituus ja paino nähdäksesi BMI:n.":"Enter height and weight to see your BMI.","Nykyinen paino":"Current weight","Muutos alusta":"Change since start","Muutos 30 pv":"Change 30 d","Tarvitaan vähintään kaksi painokirjausta.":"At least two weight entries are needed.","Anna paino kiloina":"Enter weight in kilograms","Ohjelma":"Program","Cardio ja muut lajit":"Cardio and other sports","Kesto min":"Duration min","Matka km":"Distance km","Anna kesto minuutteina":"Enter duration in minutes","Samat lihasryhmät":"Same muscle groups","Cardio (min)":"Cardio (min)","Cardio (kcal)":"Cardio (kcal)","Ohjelmasuositus":"Program recommendation","Lihasmassa":"Muscle gain","Voima":"Strength","Yleiskunto":"General fitness","2–3 treeniä/vk":"2–3 workouts/week","4 treeniä/vk":"4 workouts/week","5+ treeniä/vk":"5+ workouts/week","Aloittelija":"Beginner","Kokenut":"Experienced","Aloita ohjelma":"Start program","Kaikki ohjelmat":"All programs","Valitse":"Select","Seuraava treeni":"Next workout","viimeksi":"last","Päätä treeni":"Finish workout","Lopeta ohjelma":"Stop program","Koko vartalo 3×/vk":"Full body 3×/week","Ylä-/alavartalo 4×/vk":"Upper/lower 4×/week","Työntö–veto–jalat":"Push–pull–legs","Voima 5×5":"Strength 5×5","Aloittelijalle: kolme kokovartalotreeniä viikossa.":"For beginners: three full-body workouts per week.","Neljä treeniä viikossa: ylä- ja alavartalo vuorotellen.":"Four workouts per week, alternating upper and lower body.","Kokeneelle: 5–6 treeniä viikossa, kierto työntö, veto ja jalat.":"For experienced lifters: 5–6 days per week cycling push, pull and legs.","Perusliikkeet raskaasti: kolme treeniä viikossa, A ja B vuorotellen.":"Heavy compound lifts: three workouts per week, alternating A and B.","Tavoitteena voima: raskaat perusliikkeet ja selkeä eteneminen.":"Strength goal: heavy compound lifts and clear progression.","2–3 treeniin viikossa kokovartalotreeni on tehokkain.":"With 2–3 sessions a week, full-body training is the most efficient.","Treenaat usein ja olet kokenut: työntö–veto–jalat-jako sopii.":"You train often and are experienced: a push–pull–legs split fits.","4 treeniä viikossa: ylä-/alavartalojako antaa hyvän palautumisen.":"4 sessions a week: an upper/lower split gives good recovery.","Treeni":"Workout","Ylävartalo":"Upper body","Alavartalo":"Lower body","Työntö":"Push","Veto":"Pull","Jalat":"Legs","📷 Tunnista liike/laite kuvasta":"📷 Identify exercise/machine from photo","Liikettä ei tunnistettu.":"Exercise not recognized.","Ota kuva pakkauksesta tai viivakoodista":"Take a photo of the package or barcode","📦 Pakkaus / ravintosisältö":"📦 Package / nutrition facts","Ravintosisältöä ei löytynyt kuvasta. Kokeile ottaa taulukko lähempää.":"No nutrition facts found. Try a closer photo of the table.","Pakkaus":"Package","toistoa":"reps","Ei vielä ennätyksiä.":"No records yet.","Ennätykset":"Records","Vie kuva":"Export image","Päivä":"Day","🖼️ Oma taustakuva":"🖼️ Own background photo","Luo kuva":"Create image","Paino":"Weight","Cardio":"Cardio","Tehty Velqor-sovelluksella":"Made with Velqor","Tallennus ei ole käytettävissä. Paina kuvaa pitkään ja tallenna se.":"Saving isn't available. Long-press the image to save it.","Etusivu":"Home","Kirjaus":"Log","🍎 Tuo Apple Healthistä":"🍎 Import from Apple Health","Health-sovellus → profiilikuva → Vie kaikki terveystiedot. Valitse tähän tuotu export.zip.":"Health app → profile picture → Export All Health Data. Choose the export.zip here.","Luetaan…":"Reading…","Tuotu":"Imported","Tiedoston luku epäonnistui. Valitse Applen vientitiedosto (export.zip tai export.xml).":"Couldn't read the file. Choose Apple's export file (export.zip or export.xml).","käynnissä":"in progress","Jatka treeniä":"Resume workout","Aloita treeni":"Start workout","Ei suunniteltua treeniä tälle päivälle.":"No workout planned for today.","Treeniviikko":"Training week","Lepo":"Rest","Omat treenit":"My workouts","Ei vielä treenejä.":"No workouts yet.","Uusi treeni":"New workout","Luo treeniviikko":"Create training week","päivää viikossa":"days per week","Koko keho":"Full body","Rinta":"Chest","Selkä":"Back","Olkapäät":"Shoulders","Kädet":"Arms","Keskivartalo":"Core","Luo viikko":"Create week","Voit muokata luotuja treenejä jälkeenpäin.":"You can edit the generated workouts afterwards.","tauko":"rest","sarja":"set","Sarja":"Set","Valmis":"Ready","Sarja käynnissä":"Set in progress","Tauko":"Rest","suositus":"recommended","Tauko ohi – seuraava sarja":"Rest over – next set","Lopeta treeni":"Finish workout","Takaisin":"Back","Treeni valmis":"Workout complete","Sulje":"Close","Uusi ennätys":"New record","Muokkaa treeniä":"Edit workout","Treenin nimi":"Workout name","Voimatreeni":"Strength workout","Lisää liike":"Add exercise","Peruuta":"Cancel","Tämä viikko":"This week","viime viikkoon verrattuna":"vs last week","Toista edellinen":"Repeat last","Makrot":"Macros","Ruokapäiväkirja":"Food diary","Hae tai valitse tuote…":"Search or pick a product…","Määrä":"Amount","＋ Uusi oma tuote":"＋ New custom product","Arvot per 100 g tai 100 ml":"Values per 100 g or 100 ml","Tuotteen nimi":"Product name","Proteiini g":"Protein g","Hiilihydraatit g":"Carbs g","Rasva g":"Fat g","Kiinteä (g)":"Solid (g)","Neste (ml)":"Liquid (ml)","Yhden kappaleen paino g (valinnainen)":"Weight per piece g (optional)","Tallenna tuote":"Save product","Valitse tuote ja anna määrä":"Choose a product and enter an amount","Anna tuotteen nimi ja kalorit":"Enter a product name and calories","Tuotetta ei löytynyt. Luo se omaksi tuotteeksi.":"Product not found. Create it as your own product.","kpl":"pcs","Viimeksi käytetyt":"Recently used","Ei vielä kirjauksia tälle päivälle.":"No entries yet for this day.","Proteiini":"Protein","Hiilihydraatit":"Carbs","Rasva":"Fat","Yhteensä":"Total","ka.":"avg.","pv":"day","kirjausta ilman makrotietoja":"entries without macro data","Ei vielä kirjauksia tälle jaksolle.":"No entries yet for this period.","Tuote tallennettu ✓":"Product saved ✓","Tallenna omaksi tuotteeksi":"Save as my product","Historia":"History","Treenihistoria":"Workout history","Kaikki liikkeet":"All exercises","liikettä":"exercises","Liikkeitä":"Exercises","sarjaa":"sets","Näytä lisää":"Show more","Ei vielä tallennettuja treenejä.":"No saved workouts yet.","Vapaa kirjaus":"Free log","Tallenna pohjaksi":"Save as template","Tallennettu ✓":"Saved ✓","Vahvista poisto":"Confirm delete","Avaa historiasta":"Open in history","Valmiit ohjelmat":"Ready-made programs","Lepopäivä":"Rest day","Aloita luomalla ensimmäinen treeni tai koko treeniviikko.":"Start by creating your first workout or a whole training week.","Muokkaa viikkoa":"Edit week","Poista treeni":"Delete workout","Hauis":"Biceps","Ojentajat":"Triceps","Pakarat":"Glutes","Etureidet":"Quads","Takareidet":"Hamstrings","Pohkeet":"Calves","Lihasryhmä":"Muscle group","valinnainen":"optional","Ei cardiota":"No cardio","Lisää vähintään yksi liike tai cardio":"Add at least one exercise or cardio"}};
+let LANG=["fi","sv","en"].includes(S.lang)?S.lang:"fi";
+const tt=s=>(TR[LANG]&&TR[LANG][s])||s;
+const LOC={fi:"fi-FI",sv:"sv-SE",en:"en-GB"};
+const MNS={fi:["tammi","helmi","maalis","huhti","touko","kesä","heinä","elo","syys","loka","marras","joulu"],sv:["jan","feb","mar","apr","maj","jun","jul","aug","sep","okt","nov","dec"],en:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]};
+const orig=new WeakMap();
+function tr(){document.documentElement.lang=LANG;
+ const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;
+ while(n=w.nextNode()){const p=n.parentNode;if(!p||p.tagName==="SCRIPT"||p.closest("#wlist,#flist,#exs,#sum,#pres,#fdb"))continue;
+  if(!orig.has(n))orig.set(n,n.nodeValue);const o=orig.get(n),k=o.trim();if(k)n.nodeValue=o.replace(k,()=>tt(k))}
+ document.querySelectorAll("[placeholder]").forEach(e=>{if(!e.dataset.ph)e.dataset.ph=e.placeholder;e.placeholder=tt(e.dataset.ph)})}
+const pad=n=>String(n).padStart(2,"0");
+const ds=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const today=()=>ds(new Date());
+const pd=s=>{const[a,b,c]=s.split("-").map(Number);return new Date(a,b-1,c)};
+const mon=d=>{const x=new Date(d);x.setDate(x.getDate()-((x.getDay()+6)%7));return x};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const uid=()=>Date.now()+Math.random();
+const vol=w=>w.s*w.r*w.kg;
+
+// tabs
+$("nav").onclick=e=>{const bt=e.target.closest("button");if(!bt)return;const t=bt.dataset.t;if(!t)return;
+ document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b===bt));
+ ["train","food","stats","prog","hist","prof"].forEach(x=>$("t-"+x).classList.toggle("hide",x!==t));render()};
+
+// workouts
+$("wd").value=today();
+$("wadd").onclick=()=>{const e=exRec($("we").value.trim()),s=+$("ws").value,r=+$("wr").value,k=+$("wk").value||0;
+ if(!e||!s||!r){alert(tt("Täytä liike, sarjat ja toistot"));return}
+ S.w.push({id:uid(),d:$("wd").value||today(),e,s,r,kg:k});save();
+ $("ws").value=$("wr").value="";$("we").value=exn(e);render()};
+function renderTrain(){
+ const names=[...new Set(S.w.map(w=>w.e))];
+ $("exl").innerHTML=names.map(n=>`<option value="${esc(n)}">`).join("");
+ const l=[...S.w].sort((a,b)=>b.d.localeCompare(a.d)||b.id-a.id).slice(0,25);
+ $("wlist").innerHTML=l.length?l.map(w=>`<div class="it"><div><b>${esc(exn(w.e))}</b><div class="mu">${pd(w.d).toLocaleDateString(LOC[LANG])} · ${w.s}×${w.r} @ ${w.kg} kg</div></div><button class="x" data-del="w${w.id}">✕</button></div>`).join(""):'<div class="mu">'+tt("Ei vielä treenejä. Lisää ensimmäinen yllä.")+'</div>'}
+
+// food
+// food database + calculator
+const FD=("Kananrinta (kypsä)|Kycklingbröst (tillagat)|Chicken breast (cooked)|165|31|0|3.6|0|0;Naudan jauheliha 10%|Nötfärs 10%|Ground beef 10%|175|20|0|10|0|0;Lohi|Lax|Salmon|200|20|0|13|0|0;Kananmuna|Ägg|Egg|143|12.6|0.7|9.5|0|60;Riisi (kypsä)|Ris (kokt)|Rice (cooked)|130|2.7|28|0.3|0|0;Pasta (kypsä)|Pasta (kokt)|Pasta (cooked)|158|5.8|31|0.9|0|0;Peruna (keitetty)|Potatis (kokt)|Potato (boiled)|77|2|17|0.1|0|90;Kaurahiutale (kuiva)|Havregryn (torra)|Rolled oats (dry)|370|13|60|7|0|0;Leipä (ruis)|Bröd (råg)|Bread (rye)|215|7|42|1.5|0|35;Rahka|Kvarg|Quark|65|11|4|0.2|0|0;Raejuusto|Keso|Cottage cheese|98|11|3.4|4.3|0|0;Maito 1,5%|Mjölk 1,5%|Milk 1.5%|46|3.4|4.8|1.5|1|0;Banaani|Banan|Banana|89|1.1|23|0.3|0|120;Omena|Äpple|Apple|52|0.3|14|0.2|0|180;Avokado|Avokado|Avocado|160|2|9|15|0|150;Pähkinät sekaisin|Blandade nötter|Mixed nuts|600|18|18|52|0|0;Juusto (edam)|Ost (edam)|Cheese (edam)|320|25|1|25|0|0;Voi|Smör|Butter|717|0.9|0.1|81|0|0;Oliiviöljy|Olivolja|Olive oil|884|0|0|100|1|0;Suklaa (maito)|Choklad (mjölk)|Chocolate (milk)|535|7.7|59|30|0|0;Pizza|Pizza|Pizza|266|11|33|10|0|0;Kinkku|Skinka|Ham|110|18|1|4|0|0;Jogurtti (luonnon)|Yoghurt (naturell)|Yogurt (plain)|60|4|6|2|0|0;Proteiinijauhe|Proteinpulver|Protein powder|380|78|8|5|0|30;Tonnikala (vedessä)|Tonfisk (i vatten)|Tuna (in water)|110|25|0|1|0|0;Tomaatti|Tomat|Tomato|18|0.9|3.9|0.2|0|120;Kurkku|Gurka|Cucumber|15|0.7|3.6|0.1|0|0;Porkkana|Morot|Carrot|41|0.9|10|0.2|0|70;Mustikka|Blåbär|Blueberries|57|0.7|14|0.3|0|0;Kikherne (kypsä)|Kikärtor (kokta)|Chickpeas (cooked)|164|9|27|2.6|0|0;Tofu|Tofu|Tofu|120|13|2|7|0|0;Appelsiinimehu|Apelsinjuice|Orange juice|45|0.7|10|0.2|1|0;Cola|Cola|Cola|42|0|10.6|0|1|0;Olut|Öl|Beer|43|0.5|3.6|0|1|0;Kahvi (musta)|Kaffe (svart)|Coffee (black)|1|0.1|0|0|1|0").split(";").map(r=>{const a=r.split("|");return{n:[a[0],a[1],a[2]],k:+a[3],p:+a[4],c:+a[5],f:+a[6],l:+a[7],pc:+a[8]}});
+S.fp=S.fp||[];
+let FDATE=today(),MP="d",FSEL="",FPO=false;
+const UN={g:1,kg:1000,ml:1,dl:100,l:1000};
+const fitems=()=>[...S.fp.map(x=>({key:"u"+x.id,name:x.n,k:x.k,p:x.p,c:x.c,f:x.f,l:x.l,pc:x.pc,u:1})),...FD.map((x,i)=>({key:"b"+i,name:x.n[LI(LANG)],k:x.k,p:x.p,c:x.c,f:x.f,l:x.l,pc:x.pc}))];
+const findIt=v=>{const q=norm(v);if(!q)return null;return fitems().find(it=>norm(it.name)===q||(!it.u&&FD[+it.key.slice(1)].n.some(n=>norm(n)===q)))||null};
+const calc=(it,a,u)=>{const g=a*(u==="kpl"?it.pc:UN[u]),m=x=>+(x*g/100).toFixed(1);return{g,k:Math.round(it.k*g/100),p:m(it.p),c:m(it.c),f:m(it.f)}};
+const ulab=u=>u==="kpl"?tt("kpl"):u;
+function fillUnits(it){const cur=$("fu").value,o=["g","kg","ml","dl","l"];if(it&&it.pc)o.push("kpl");
+ $("fu").innerHTML=o.map(u=>`<option value="${u}">${ulab(u)}</option>`).join("");$("fu").value=o.includes(cur)?cur:"g"}
+function fillDb(){$("fdl").innerHTML=fitems().map(it=>`<option value="${esc(it.name)}">`).join("");fillUnits(findIt($("fs").value))}
+function prev(){const it=findIt($("fs").value),v=+$("fg").value,o=$("fprev");
+ if(!it){o.textContent=$("fs").value.trim()?tt("Tuotetta ei löytynyt. Luo se omaksi tuotteeksi."):"";return}
+ if(!v){o.textContent="";return}
+ const r=calc(it,v,$("fu").value);o.innerHTML=`<b style="color:var(--tx)">${r.k} kcal</b> \u00b7 ${tt("P")} ${r.p} g \u00b7 ${tt("H")} ${r.c} g \u00b7 ${tt("R")} ${r.f} g`}
+function onSel(){const it=findIt($("fs").value);
+ if(it&&it.key!==FSEL){FSEL=it.key;fillUnits(it);const u=it.pc?"kpl":it.l?"ml":"g";$("fu").value=u;$("fg").value=u==="kpl"?1:u==="ml"?200:100}else if(!it)FSEL="";prev()}
+$("fs").oninput=onSel;$("fg").oninput=prev;$("fu").onchange=prev;
+$("goal").value=S.goal;
+$("goal").onchange=()=>{S.goal=+$("goal").value||2200;save();render()};
+$("fd").onchange=()=>{FDATE=$("fd").value||today();render()};
+$("fadd").onclick=()=>{const it=findIt($("fs").value),v=+$("fg").value,u=$("fu").value;
+ if(!it||!v){alert(tt("Valitse tuote ja anna määrä"));return}
+ const r=calc(it,v,u);S.f.push({id:uid(),d:FDATE,n:it.name,k:r.k,p:r.p,c:r.c,f:r.f,amt:v,u,src:it.key});save();$("fs").value="";FSEL="";$("fprev").textContent="";render()};
+$("fpb").onclick=()=>{FPO=!FPO;if(FPO&&!$("fpn").value)$("fpn").value=$("fs").value;render()};
+$("fpsave").onclick=()=>{const n=$("fpn").value.trim();if(!n||$("fpk").value===""){alert(tt("Anna tuotteen nimi ja kalorit"));return}
+ S.fp.push({id:uid(),n,k:+$("fpk").value||0,p:+$("fpp").value||0,c:+$("fpc").value||0,f:+$("fpf").value||0,l:$("fpl").value==="ml"?1:0,pc:+$("fpw").value||0});save();
+ $("fs").value=n;["fpn","fpk","fpp","fpc","fpf","fpw"].forEach(i=>$(i).value="");FPO=false;FSEL="";render();onSel()};
+$("frec").addEventListener("click",e=>{const id=+(e.target.dataset.fr||0);if(!id)return;const o=S.f.find(x=>x.id===id);if(o){S.f.push({...o,id:uid(),d:FDATE});save();render()}});
+$("mper").onclick=e=>{const m=e.target.dataset.m;if(!m)return;MP=m;document.querySelectorAll("#mper button").forEach(b=>b.classList.toggle("g",b.dataset.m!==m));renderMacros()};
+function mrange(per,dt){const d=pd(dt);if(per==="d")return[dt,dt];if(per==="w"){const a=mon(d),b=new Date(a);b.setDate(b.getDate()+6);return[ds(a),ds(b)]}return[ds(new Date(d.getFullYear(),d.getMonth(),1)),ds(new Date(d.getFullYear(),d.getMonth()+1,0))]}
+function pie(v,cols,c){const t=v[0]+v[1]+v[2];
+ if(!t)return`<svg width="140" height="140"><text x="70" y="72" text-anchor="middle" font-size="16" font-weight="700" fill="currentColor">${c}</text><text x="70" y="90" text-anchor="middle" font-size="11" fill="currentColor" opacity=".6">kcal</text></svg>`;
+ let a=-Math.PI/2;const R=64,r=40,pt=(q,g)=>[70+q*Math.cos(g),70+q*Math.sin(g)];
+ const sl=v.map((x,i)=>{if(!x)return"";const b=a+x/t*2*Math.PI;let d;
+  if(x/t>.9999)d=`<circle cx="70" cy="70" r="${(R+r)/2}" fill="none" stroke="${cols[i]}" stroke-width="${R-r}"/>`;
+  else{const[x1,y1]=pt(R,a),[x2,y2]=pt(R,b),[x3,y3]=pt(r,b),[x4,y4]=pt(r,a),lg=b-a>Math.PI?1:0;d=`<path d="M${x1} ${y1}A${R} ${R} 0 ${lg} 1 ${x2} ${y2}L${x3} ${y3}A${r} ${r} 0 ${lg} 0 ${x4} ${y4}Z" fill="${cols[i]}"/>`}
+  a=b;return d}).join("");
+ return `<svg width="140" height="140" viewBox="0 0 140 140" role="img">${sl}<text x="70" y="68" text-anchor="middle" font-size="18" font-weight="700" fill="currentColor">${c}</text><text x="70" y="86" text-anchor="middle" font-size="11" fill="currentColor" opacity=".6">kcal</text></svg>`}
+function renderMacros(){const[a,b]=mrange(MP,FDATE),f=LOC[LANG],l=S.f.filter(x=>x.d>=a&&x.d<=b),days=new Set(l.map(x=>x.d)).size;
+ let kc=0,P=0,C=0,F=0,nm=0;l.forEach(x=>{kc+=x.k;if(x.p===undefined)nm++;else{P+=x.p;C+=x.c;F+=x.f}});
+ const E=[P*4,C*4,F*9],se=E[0]+E[1]+E[2],cols=["#339af0","#fab005","#f06595"],names=["Proteiini","Hiilihydraatit","Rasva"],gr=[P,C,F];
+ const rows=gr.map((g,i)=>`<div class="it"><span><i style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${cols[i]};margin-right:6px"></i>${tt(names[i])}</span><span><b>${Math.round(g)} g</b> <span class="mu">${se?Math.round(E[i]/se*100):0} %${days>1?" \u00b7 "+tt("ka.")+" "+Math.round(g/days)+" g":""}</span></span></div>`).join("");
+ $("mpie").innerHTML=l.length?`<div class="mu" style="margin-bottom:6px">${a===b?pd(a).toLocaleDateString(f):pd(a).toLocaleDateString(f)+" \u2013 "+pd(b).toLocaleDateString(f)}</div><div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">${pie(E,cols,kc)}<div style="flex:1;min-width:170px">${rows}<div class="mu" style="margin-top:6px">${tt("Yhteensä")}: <b style="color:var(--tx)">${kc} kcal</b>${days>1?" \u00b7 "+tt("ka.")+" "+Math.round(kc/days)+" kcal/"+tt("pv"):""}</div>${nm?`<div class="mu">${nm} ${tt("kirjausta ilman makrotietoja")}</div>`:""}</div></div>`:`<div class="mu">${tt("Ei vielä kirjauksia tälle jaksolle.")}</div>`}
+function renderRec2(){const seen=new Set(),l=[];[...S.f].sort((a,b)=>b.id-a.id).forEach(e=>{const k=e.src+"|"+e.amt+e.u;if(e.src&&e.amt&&!seen.has(k)&&l.length<8){seen.add(k);l.push(e)}});
+ $("frec").innerHTML=l.length?`<div class="mu" style="width:100%">${tt("Viimeksi käytetyt")}</div>`+l.map(e=>`<button class="chip" data-fr="${e.id}">${esc(e.n)} \u00b7 ${e.amt} ${ulab(e.u)}</button>`).join(""):""}
+function renderFood(){const l=S.f.filter(f=>f.d===FDATE),t=l.reduce((a,f)=>a+f.k,0),sm=k=>Math.round(l.reduce((a,f)=>a+(f[k]||0),0));
+ $("fdt").textContent=FDATE===today()?tt("Tänään"):pd(FDATE).toLocaleDateString(LOC[LANG],{weekday:"short",day:"numeric",month:"numeric"});
+ $("fd").value=FDATE;$("kt").textContent=t;
+ $("kbar").style.width=Math.min(100,t/S.goal*100)+"%";$("kbar").className=t>S.goal?"over":"";
+ $("kleft").textContent=t<=S.goal?`${tt("Jäljellä")} ${S.goal-t} kcal`:`${tt("Yli tavoitteen")} ${t-S.goal} kcal`;
+ $("kmac").textContent=`${tt("P")} ${sm("p")} g \u00b7 ${tt("H")} ${sm("c")} g \u00b7 ${tt("R")} ${sm("f")} g`;
+ $("flist").innerHTML=l.length?l.map(f=>`<div class="it"><div style="min-width:0"><b>${esc(f.n)}</b><div class="mu">${f.amt?f.amt+" "+ulab(f.u)+" \u00b7 ":""}${f.p!==undefined?`${tt("P")} ${f.p} \u00b7 ${tt("H")} ${f.c} \u00b7 ${tt("R")} ${f.f}`:""}</div></div><div style="white-space:nowrap"><b>${f.k}</b> kcal <button class="x" data-del="f${f.id}">\u2715</button></div></div>`).join(""):`<div class="mu">${tt("Ei vielä kirjauksia tälle päivälle.")}</div>`;
+ $("fpanel").classList.toggle("hide",!FPO);
+ $("fplist").innerHTML=S.fp.map(x=>`<div class="it"><div style="min-width:0"><b>${esc(x.n)}</b><div class="mu">${x.k} kcal \u00b7 ${tt("P")} ${x.p} \u00b7 ${tt("H")} ${x.c} \u00b7 ${tt("R")} ${x.f} / 100 ${x.l?"ml":"g"}</div></div><button class="x" data-del="p${x.id}">\u2715</button></div>`).join("");
+ renderRec2();renderMacros()}
+
+// photo estimate
+$("phb").onclick=()=>$("ph").click();
+function shrink(file){return new Promise((res,rej)=>{const im=new Image(),u=URL.createObjectURL(file);
+ im.onload=()=>{const m=1024,s=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement("canvas");
+  c.width=im.width*s;c.height=im.height*s;c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+  c.toBlob(b=>b?res({blob:b,url:c.toDataURL("image/jpeg",.6)}):rej(new Error("kuva")),"image/jpeg",.85);URL.revokeObjectURL(u)};
+ im.onerror=()=>rej(new Error("Kuvaa ei voitu lukea"));im.src=u})}
+$("ph").onchange=async e=>{const f=e.target.files[0];if(!f)return;
+ const out=$("pres");out.textContent=tt("Analysoidaan kuvaa…");
+ try{
+  const{blob,url}=await shrink(f);$("pv").src=url;$("pv").classList.remove("hide");
+  const sample=await (HOSTED?claude.use("sample"):null);
+  if(!sample){out.textContent=tt("Kuva-analyysi ei ole käytettävissä tässä näkymässä. Käytä kalorilaskuria.");return}
+  const lim=await sample.limits();
+  if(!lim||!lim.images){out.textContent=tt("Kuvien analysointi ei ole käytössä. Käytä kalorilaskuria.");return}
+  const r=await sample('Arvioi kuvan ruoka-annoksen kalorit. Vastaa VAIN JSON-muodossa ilman muuta tekstiä: {"nimi":"ruoan nimi","kcal":kokonaisluku,"proteiini_g":luku,"hiilihydraatti_g":luku,"rasva_g":luku,"huomio":"lyhyt perustelu ja oletettu annoskoko"}. Jos kuvassa ei ole ruokaa, kcal on 0. Kirjoita nimi ja huomio kielellä: '+{fi:"suomi",sv:"ruotsi",en:"englanti"}[LANG]+'.',{images:[blob],cache:false});
+  const m=r.text.replace(/```json|```/g,"").match(/\{[\s\S]*\}/);
+  const j=JSON.parse(m[0]);
+  if(!j.kcal){out.textContent=tt("Kuvasta ei löytynyt ruokaa.");return}
+  out.innerHTML=`<div style="color:var(--tx)"><b>${esc(j.nimi)}</b> ≈ <b>${Math.round(j.kcal)} kcal</b><div class="mu">${tt("P")} ${Math.round(j.proteiini_g)} g · ${tt("H")} ${Math.round(j.hiilihydraatti_g)} g · ${tt("R")} ${Math.round(j.rasva_g)} g</div><div class="mu">${esc(j.huomio||"")}</div><div class="mu">${tt("Arvio on suuntaa-antava.")}</div>
+  <div class="row" style="margin-top:6px"><input id="pk" type="number" value="${Math.round(j.kcal)}"><button class="b" id="pad">${tt("Lisää päivään")}</button></div></div>`;
+  $("pad").onclick=()=>{S.f.push({id:uid(),d:FDATE,n:j.nimi+" (kuva)",k:+$("pk").value||0,p:Math.round(+j.proteiini_g||0),c:Math.round(+j.hiilihydraatti_g||0),f:Math.round(+j.rasva_g||0)});save();out.textContent=tt("Lisätty ✓");render()};
+ }catch(err){out.textContent=tt("Arviointi epäonnistui")+(err&&err.code==="not_granted"?" ("+tt("lupa evätty")+")":"")+". "+tt("Yritä uudelleen.")}
+ e.target.value=""};
+
+// delete
+document.addEventListener("click",e=>{const d=e.target.dataset&&e.target.dataset.del;if(!d)return;
+ const id=+d.slice(1);if(d[0]==="w")S.w=S.w.filter(x=>x.id!==id);else if(d[0]==="c")S.c=S.c.filter(x=>x.id!==id);else if(d[0]==="p")S.fp=S.fp.filter(x=>x.id!==id);else if(d[0]==="b")S.bw=S.bw.filter(x=>x.id!==id);else S.f=S.f.filter(x=>x.id!==id);save();render()});
+
+// stats
+$("per").onclick=e=>{const p=e.target.dataset.p;if(!p)return;per=p;
+ document.querySelectorAll("#per button").forEach(b=>b.classList.toggle("g",b.dataset.p!==p));renderStats()};
+$("exs").onchange=()=>{exSel=$("exs").value;renderStats()};
+const MN=["tammi","helmi","maalis","huhti","touko","kesä","heinä","elo","syys","loka","marras","joulu"];
+function buckets(){const n=new Date(),B=[];
+ if(per==="w"){const m=mon(n);for(let i=7;i>=0;i--){const a=new Date(m);a.setDate(a.getDate()-i*7);const b=new Date(a);b.setDate(b.getDate()+6);B.push({a:ds(a),b:ds(b),l:tt("vk")+Math.round((a-new Date(a.getFullYear(),0,1))/6048e5+1),days:7})}}
+ else if(per==="m"){for(let i=11;i>=0;i--){const a=new Date(n.getFullYear(),n.getMonth()-i,1),b=new Date(a.getFullYear(),a.getMonth()+1,0);B.push({a:ds(a),b:ds(b),l:MNS[LANG][a.getMonth()],days:b.getDate()})}}
+ else{for(let i=4;i>=0;i--){const y=n.getFullYear()-i;B.push({a:y+"-01-01",b:y+"-12-31",l:""+y,days:365})}}
+ return B}
+const inB=(x,b)=>x.d>=b.a&&x.d<=b.b;
+function bars(vals,labels,color,unit){const mx=Math.max(1,...vals),W=Math.max(300,vals.length*44),H=140;
+ const bw=W/vals.length;
+ return `<svg width="${W}" height="${H+34}" role="img">`+vals.map((v,i)=>{const h=v/mx*H;
+  return `<rect x="${i*bw+6}" y="${H-h+14}" width="${bw-12}" height="${h}" rx="4" fill="${color}"/>
+  <text x="${i*bw+bw/2}" y="${H-h+10}" font-size="10" text-anchor="middle" fill="currentColor">${v?Math.round(v)+unit:""}</text>
+  <text x="${i*bw+bw/2}" y="${H+28}" font-size="10" text-anchor="middle" fill="currentColor" opacity=".6">${labels[i]}</text>`}).join("")+`</svg>`}
+function line(pts,labels){if(pts.length<2)return'<div class="mu">'+tt("Tarvitaan vähintään kaksi kirjausta tästä liikkeestä.")+'</div>';
+ const mx=Math.max(...pts),mn=Math.min(...pts),W=Math.max(300,pts.length*50),H=120,r=mx-mn||1;
+ const xy=pts.map((v,i)=>[20+i*(W-40)/(pts.length-1),H-(v-mn)/r*(H-20)+10]);
+ return `<svg width="${W}" height="${H+30}"><polyline fill="none" stroke="var(--ac)" stroke-width="2.5" points="${xy.map(p=>p.join(",")).join(" ")}"/>`+xy.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="var(--ac)"/><text x="${p[0]}" y="${p[1]-8}" font-size="10" text-anchor="middle" fill="currentColor">${pts[i]}</text><text x="${p[0]}" y="${H+24}" font-size="10" text-anchor="middle" fill="currentColor" opacity=".6">${labels[i]}</text>`).join("")+`</svg>`}
+function renderStats(){
+ const B=buckets(),cur=B[B.length-1];
+ const ws=S.w.filter(x=>inB(x,cur)),cs=S.c.filter(x=>inB(x,cur)),days=new Set([...ws,...cs].map(x=>x.d)).size;
+ const fs=S.f.filter(x=>inB(x,cur)),fd=new Set(fs.map(x=>x.d)).size;
+ const kc=fs.reduce((a,f)=>a+f.k,0);
+ $("sh").textContent=tt("Yhteenveto")+" – "+tt({w:"tämä viikko",m:"tämä kuukausi",y:"tämä vuosi"}[per]);
+ $("sum").innerHTML=[["Treenipäivät",days],["Sarjoja",ws.reduce((a,x)=>a+x.s,0)],["Volyymi",Math.round(ws.reduce((a,x)=>a+vol(x),0)).toLocaleString(LOC[LANG])+" kg"],["Kcal/päivä ka.",fd?Math.round(kc/fd):"–"],["Cardio (min)",cs.reduce((a,x)=>a+x.min,0)],["Cardio (kcal)",cs.reduce((a,x)=>a+x.kcal,0)]].map(s=>`<div class="stat"><div class="mu">${tt(s[0])}</div><div class="big">${s[1]}</div></div>`).join("");
+ const lab=B.map(b=>b.l);
+ $("c1").innerHTML=bars(B.map(b=>S.w.filter(x=>inB(x,b)).reduce((a,x)=>a+vol(x),0)),lab,"var(--ac)","");
+ $("c2").innerHTML=bars(B.map(b=>{const f=S.f.filter(x=>inB(x,b));const n=new Set(f.map(x=>x.d)).size;return n?f.reduce((a,x)=>a+x.k,0)/n:0}),lab,"var(--ok)","");
+ const names=[...new Set(S.w.map(w=>w.e))];
+ $("c4").innerHTML=bars(B.map(b=>S.c.filter(x=>inB(x,b)).reduce((a,x)=>a+x.min,0)),lab,"#339af0","");
+ if(!names.includes(exSel))exSel=names[0]||"";
+ $("exs").innerHTML=names.map(n=>`<option value="${esc(n)}" ${n===exSel?"selected":""}>${esc(exn(n))}</option>`).join("")||"<option>"+tt("Ei liikkeitä")+"</option>";
+ const ex=S.w.filter(w=>w.e===exSel);
+ const best=B.map(b=>Math.max(0,...ex.filter(x=>inB(x,b)).map(x=>x.kg)));
+ const idx=best.map((v,i)=>v>0?i:-1).filter(i=>i>=0);
+ $("c3").innerHTML=exSel?line(idx.map(i=>best[i]),idx.map(i=>lab[i])):"";
+ if(ex.length){const e1=Math.max(...ex.map(x=>x.kg*(1+x.r/30)));const hi=Math.max(...ex.map(x=>x.kg));
+  $("pr").textContent=`${tt("Ennätyspaino")} ${hi} kg · ${tt("arvioitu 1RM")} ≈ ${Math.round(e1)} kg (${tt("parhaat painot / jakso")})`}else $("pr").textContent=""}
+
+S.p=S.p||{};S.bw=S.bw||[];S.c=S.c||[];S.prog=S.prog||null;S.rt=S.rt||[];S.plan=S.plan||Array(7).fill(null);S.sess=S.sess||null;S.hist=S.hist||[];
+$("bd").value=today();
+$("pn").value=S.p.name||"";$("ps").value=S.p.sex||"";$("phh").value=S.p.h||"";
+$("pn").onchange=$("ps").onchange=$("phh").onchange=()=>{S.p={name:$("pn").value.trim(),sex:$("ps").value,h:+$("phh").value||0};save();render()};
+$("badd").onclick=()=>{const k=+$("bk").value;if(!k||k<20||k>400){alert(tt("Anna paino kiloina"));return}
+ const d=$("bd").value||today();S.bw=S.bw.filter(x=>x.d!==d);S.bw.push({id:uid(),d,kg:k});save();$("bk").value="";render()};
+function renderProf(){
+ const p=S.p,bw=[...S.bw].sort((a,b)=>a.d.localeCompare(b.d)),last=bw[bw.length-1],first=bw[0];
+ const h=p.h?p.h/100:0,bmi=last&&h?last.kg/(h*h):0;
+ const cat=bmi<18.5?"alipaino":bmi<25?"normaali":bmi<30?"ylipaino":"merkittävä ylipaino";
+ $("pinfo").textContent=(p.name?tt("Hei")+", "+p.name+"! ":"")+(bmi?"BMI "+bmi.toFixed(1)+" ("+tt(cat)+")":tt("Anna pituus ja paino nähdäksesi BMI:n."));
+ const cut=ds(new Date(Date.now()-30*864e5)),old=bw.filter(x=>x.d<=cut).pop()||first;
+ const f=v=>v===null?"–":(v>0?"+":"")+v.toFixed(1)+" kg";
+ const ch=last&&first&&last!==first?last.kg-first.kg:null,c30=last&&old&&old!==last?last.kg-old.kg:null;
+ $("bsum").innerHTML=[["Nykyinen paino",last?last.kg+" kg":"–"],["BMI",bmi?bmi.toFixed(1):"–"],["Muutos alusta",f(ch)],["Muutos 30 pv",f(c30)]].map(s=>`<div class="stat"><div class="mu">${tt(s[0])}</div><div class="big">${s[1]}</div></div>`).join("");
+ const pts=bw.slice(-30);
+ $("bc").innerHTML=pts.length<2?'<div class="mu">'+tt("Tarvitaan vähintään kaksi painokirjausta.")+'</div>':line(pts.map(x=>x.kg),pts.map(x=>pd(x.d).toLocaleDateString(LOC[LANG],{day:"numeric",month:"numeric"})));
+ $("blist").innerHTML=[...bw].reverse().slice(0,10).map(x=>`<div class="it"><div>${pd(x.d).toLocaleDateString(LOC[LANG])}</div><div><b>${x.kg}</b> kg <button class="x" data-del="b${x.id}">✕</button></div></div>`).join("")}
+const EX=("Penkkipunnerrus|Bänkpress|Bench press|c;Vinopenkkipunnerrus|Lutande bänkpress|Incline bench press|c;Käsipainopunnerrus|Hantelpress|Dumbbell press|c;Punnerrus|Armhävning|Push-up|c;Dippi|Dips|Dips|c;Leuanveto|Chins|Pull-up|b;Ylätalja|Latsdrag|Lat pulldown|b;Kulmasoutu|Skivstångsrodd|Barbell row|b;Käsipainosoutu|Hantelrodd|Dumbbell row|b;Maastaveto|Marklyft|Deadlift|b;Pystypunnerrus|Axelpress|Overhead press|s;Sivunosto|Sidolyft|Lateral raise|s;Face pull|Face pull|Face pull|s;Hauiskäännöt|Bicepscurl|Biceps curl|a;Ojentajapunnerrus|Tricepspress|Triceps pushdown|a;Kyykky|Knäböj|Squat|l;Jalkaprässi|Benpress|Leg press|l;Askelkyykky|Utfall|Lunge|l;Romanialainen maastaveto|Rumänsk marklyft|Romanian deadlift|l;Pakarasilta|Höftlyft|Hip thrust|l;Pohkeennosto|Vadlyft|Calf raise|l;Vatsarutistus|Situps|Crunch|k;Lankku|Planka|Plank|k;Rintaprässi|Bröstpress|Chest press|c|machine chest press,pec press;Rinnallevedot|Flyes|Chest fly|c|pec deck,cable fly,butterfly;Alatalja|Sittande rodd|Seated cable row|b|cable row,low row;Hyperextensio|Ryggresningar|Back extension|b|hyperextension;Olkapääprässi|Axelpress i maskin|Shoulder press machine|s|machine shoulder press;Takaolkapäännosto|Bakre axellyft|Rear delt fly|s|reverse fly;Vasarakäännöt|Hammarcurl|Hammer curl|a;Ranskalainen punnerrus|Skullcrushers|Skull crusher|a|french press,lying triceps extension;Jalkojenojennus|Benspark|Leg extension|l|quad extension;Jalkojenkoukistus|Bencurl|Leg curl|l|hamstring curl;Etukyykky|Frontböj|Front squat|l;Bulgarialainen askelkyykky|Bulgarisk utfallsböj|Bulgarian split squat|l|split squat;Jalannosto riipunnassa|Hängande benlyft|Hanging leg raise|k|leg raise;Venäläinen kierto|Russian twist|Russian twist|k;Kahvakuulakeinahdus|Kettlebell swing|Kettlebell swing|l|kb swing;Vatsarulla|Magrulle|Ab wheel|k|ab roller;Scott-curl|Predikarbänk|Preacher curl|a|scott curl;Talja-hauiskäännöt|Kabelcurl|Cable curl|a|cable biceps curl;Penkkidippi|Bänkdips|Bench dip|a|triceps dip;Ojentajaojennus pään yli|Overhead tricepsextension|Overhead triceps extension|a|french extension").split(";").map(s=>s.split("|"));
+const SPORTS=[["Juoksu","Löpning","Running",9.8],["Kävely","Promenad","Walking",3.8],["Pyöräily","Cykling","Cycling",7.5],["Uinti","Simning","Swimming",7],["Hiihto","Skidåkning","Skiing",8],["Soutu","Rodd","Rowing",7],["Jalkapallo","Fotboll","Football",8],["Salibandy","Innebandy","Floorball",8],["Tennis","Tennis","Tennis",7],["Jooga","Yoga","Yoga",2.5],["Kiipeily","Klättring","Climbing",8],["Sisäpyöräily","Spinning","Indoor cycling",6.8],["Padel","Padel","Padel",6],["Sulkapallo","Badminton","Badminton",5.5],["Squash","Squash","Squash",7.3],["Pöytätennis","Bordtennis","Table tennis",4],["Koripallo","Basket","Basketball",6.5],["Lentopallo","Volleyboll","Volleyball",4],["Jääkiekko","Ishockey","Ice hockey",8],["Luistelu","Skridskoåkning","Ice skating",7],["Laskettelu","Utförsåkning","Downhill skiing",5.3],["Retkeily","Vandring","Hiking",6],["Crosstrainer","Crosstrainer","Elliptical",5],["Porraskone","Trappmaskin","Stair climber",8.8],["Intervalli/HIIT","Intervall/HIIT","HIIT",8],["Crossfit","Crossfit","CrossFit",8],["Kuntonyrkkeily","Boxning","Boxing",7.8],["Kamppailulajit","Kampsport","Martial arts",10],["Ryhmäliikunta","Gruppträning","Group fitness",6],["Tanssi","Dans","Dance",5],["Pilates","Pilates","Pilates",3],["Melonta","Paddling","Paddling",5],["Golf","Golf","Golf",4.3],["Frisbeegolf","Frisbeegolf","Disc golf",3],["Muu laji","Annan sport","Other sport",5]];
+const LI=LANG=>LANG==="sv"?1:LANG==="en"?2:0;
+const spn=n=>{const s=SPORTS.find(x=>x[0]===n);return s?s[LI(LANG)]:n};
+const exn=n=>{const e=EX.find(x=>x[0]===n);return e?e[LI(LANG)]:n};
+const norm=s=>s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f\s\-]/g,"");
+const nm=x=>[...x.slice(0,3),...(x[4]?x[4].split(","):[])];
+const exRec=v=>{const q=norm(v);if(!q)return v;const e=EX.find(x=>nm(x).some(y=>norm(y)===q));if(e)return e[0];
+ if(q.length>=4){const c=EX.filter(x=>nm(x).some(y=>norm(y).startsWith(q)));if(c.length===1)return c[0][0]}
+ return v};
+const lev=(a,b)=>{const d=[...Array(b.length+1).keys()];for(let i=1;i<=a.length;i++){let p=d[0];d[0]=i;for(let j=1;j<=b.length;j++){const u=d[j];d[j]=Math.min(d[j]+1,d[j-1]+1,p+(a[i-1]===b[j-1]?0:1));p=u}}return d[b.length]};
+const lastOf=n=>[...S.w].filter(w=>w.e===n).sort((a,b)=>b.d.localeCompare(a.d)||b.id-a.id)[0];
+function sugg(v){const q=norm(v),sorted=[...S.w].sort((a,b)=>b.d.localeCompare(a.d));
+ const all=[...new Set([...EX.map(x=>x[0]),...S.w.map(w=>w.e)])];let m;
+ if(!q)m=[...new Set(sorted.map(w=>w.e))].slice(0,5);
+ else{const sc=n=>{const e=EX.find(x=>x[0]===n),names=(e?nm(e):[n]).map(norm);let b=9;
+   names.forEach(s=>{if(s.startsWith(q))b=Math.min(b,0);else if(s.includes(q))b=Math.min(b,1);else if(q.length>=3){const l=lev(q,s.slice(0,q.length));if(l<=(q.length>5?2:1))b=Math.min(b,2+l)}});return b};
+  m=all.map(n=>[n,sc(n)]).filter(x=>x[1]<9).sort((a,b)=>a[1]-b[1]).slice(0,5).map(x=>x[0])}
+ const g=q&&m.length&&EX.find(x=>x[0]===m[0]);
+ return{m,rel:g?EX.filter(x=>x[3]===g[3]&&!m.includes(x[0])).map(x=>x[0]).slice(0,3):[]}}
+function renderSug(){const{m,rel}=sugg($("we").value),ch=n=>`<button class="b g" data-sx="${esc(n)}">${esc(exn(n))}</button>`;
+ $("sug").innerHTML=m.map(ch).join("")+(rel.length?`<div class="mu" style="width:100%">${tt("Samat lihasryhmät")}:</div>`+rel.map(ch).join(""):"")}
+$("we").oninput=renderSug;
+document.addEventListener("click",e=>{const x=e.target.dataset&&e.target.dataset.sx;if(!x)return;$("we").value=exn(x);const l=lastOf(x);if(l){$("ws").value=l.s;$("wr").value=l.r;$("wk").value=l.kg}renderSug()});
+// cardio
+$("cd").value=today();
+function fillSp(){const v=$("csp").value;$("csp").innerHTML=SPORTS.map(s=>`<option value="${s[0]}">${spn(s[0])}</option>`).join("");if(v)$("csp").value=v}
+$("cadd").onclick=()=>{const m=+$("cm").value;if(!m){alert(tt("Anna kesto minuutteina"));return}
+ const s=SPORTS.find(x=>x[0]===$("csp").value)||SPORTS[0],lw=[...S.bw].sort((a,b)=>a.d.localeCompare(b.d)).pop(),w=lw?lw.kg:75;
+ S.c.push({id:uid(),d:$("cd").value||today(),sp:s[0],min:m,km:+$("ck").value||0,kcal:Math.round(s[3]*w*m/60)});save();$("cm").value=$("ck").value="";render()};
+function renderCardio(){const l=[...S.c].sort((a,b)=>b.d.localeCompare(a.d)||b.id-a.id).slice(0,10);
+ $("clist").innerHTML=l.map(c=>`<div class="it"><div><b>${esc(spn(c.sp))}</b><div class="mu">${pd(c.d).toLocaleDateString(LOC[LANG])} · ${c.min} min${c.km?" · "+c.km+" km":""} · ~${c.kcal} kcal</div></div><button class="x" data-del="c${c.id}">✕</button></div>`).join("")}
+// programs
+const PR={
+fb:{n:"Koko vartalo 3×/vk",d:"Aloittelijalle: kolme kokovartalotreeniä viikossa.",s:[
+ {l:"Treeni",x:"A",e:[["Kyykky",3,8],["Penkkipunnerrus",3,8],["Kulmasoutu",3,8],["Vatsarutistus",3,15]]},
+ {l:"Treeni",x:"B",e:[["Maastaveto",3,5],["Pystypunnerrus",3,8],["Ylätalja",3,10],["Askelkyykky",3,10]]},
+ {l:"Treeni",x:"C",e:[["Jalkaprässi",3,10],["Vinopenkkipunnerrus",3,10],["Käsipainosoutu",3,10],["Hauiskäännöt",2,12],["Ojentajapunnerrus",2,12]]}]},
+ul:{n:"Ylä-/alavartalo 4×/vk",d:"Neljä treeniä viikossa: ylä- ja alavartalo vuorotellen.",s:[
+ {l:"Ylävartalo",x:"A",e:[["Penkkipunnerrus",4,6],["Kulmasoutu",4,8],["Pystypunnerrus",3,8],["Ylätalja",3,10],["Hauiskäännöt",3,12],["Ojentajapunnerrus",3,12]]},
+ {l:"Alavartalo",x:"A",e:[["Kyykky",4,6],["Romanialainen maastaveto",3,8],["Jalkaprässi",3,10],["Pohkeennosto",4,12],["Vatsarutistus",3,15]]},
+ {l:"Ylävartalo",x:"B",e:[["Vinopenkkipunnerrus",4,8],["Käsipainosoutu",4,10],["Sivunosto",3,15],["Face pull",3,15],["Dippi",3,10]]},
+ {l:"Alavartalo",x:"B",e:[["Maastaveto",3,5],["Askelkyykky",3,10],["Pakarasilta",3,10],["Pohkeennosto",3,15]]}]},
+pp:{n:"Työntö–veto–jalat",d:"Kokeneelle: 5–6 treeniä viikossa, kierto työntö, veto ja jalat.",s:[
+ {l:"Työntö",x:"",e:[["Penkkipunnerrus",4,8],["Pystypunnerrus",3,8],["Vinopenkkipunnerrus",3,10],["Sivunosto",4,15],["Ojentajapunnerrus",3,12]]},
+ {l:"Veto",x:"",e:[["Maastaveto",3,5],["Leuanveto",4,8],["Kulmasoutu",3,10],["Face pull",3,15],["Hauiskäännöt",3,12]]},
+ {l:"Jalat",x:"",e:[["Kyykky",4,8],["Romanialainen maastaveto",3,10],["Jalkaprässi",3,12],["Pakarasilta",3,10],["Pohkeennosto",4,15]]}]},
+st:{n:"Voima 5×5",d:"Perusliikkeet raskaasti: kolme treeniä viikossa, A ja B vuorotellen.",s:[
+ {l:"Treeni",x:"A",e:[["Kyykky",5,5],["Penkkipunnerrus",5,5],["Kulmasoutu",5,5]]},
+ {l:"Treeni",x:"B",e:[["Kyykky",5,5],["Pystypunnerrus",5,5],["Maastaveto",1,5]]}]}};
+let rec={g:"mus",d:"3",l:"beg"};
+function recommend(r){if(r.g==="str")return["st","Tavoitteena voima: raskaat perusliikkeet ja selkeä eteneminen."];
+ if(+r.d<=3)return["fb","2–3 treeniin viikossa kokovartalotreeni on tehokkain."];
+ if(+r.d>=5&&r.l==="exp")return["pp","Treenaat usein ja olet kokenut: työntö–veto–jalat-jako sopii."];
+ return["ul","4 treeniä viikossa: ylä-/alavartalojako antaa hyvän palautumisen."]}
+function renderProg(){const b=$("progbox"),P=S.prog&&PR[S.prog.id];
+ const opts=(k,a)=>`<select data-rc="${k}">`+a.map(o=>`<option value="${o[0]}" ${rec[k]===o[0]?"selected":""}>${tt(o[1])}</option>`).join("")+"</select>";
+ if(!P){const[id,why]=recommend(rec),R=PR[id];
+  b.innerHTML=`<div class="card"><h2>${tt("Ohjelmasuositus")}</h2><div class="row">${opts("g",[["mus","Lihasmassa"],["str","Voima"],["gen","Yleiskunto"]])}${opts("d",[["3","2–3 treeniä/vk"],["4","4 treeniä/vk"],["5","5+ treeniä/vk"]])}${opts("l",[["beg","Aloittelija"],["exp","Kokenut"]])}</div>
+  <div style="padding-top:8px"><b>${tt(R.n)}</b><div class="mu">${tt(R.d)}</div><div class="mu">${tt(why)}</div><div class="row" style="margin-top:8px"><button class="b" data-pg="start:${id}">${tt("Aloita ohjelma")}</button></div></div></div>
+  <div class="card"><h2>${tt("Kaikki ohjelmat")}</h2>${Object.keys(PR).map(k=>`<div class="it"><div><b>${tt(PR[k].n)}</b><div class="mu">${tt(PR[k].d)}</div></div><button class="b g" data-pg="start:${k}" style="flex:none">${tt("Valitse")}</button></div>`).join("")}</div>`;return}
+ const ss=P.s[S.prog.n%P.s.length];
+ b.innerHTML=`<div class="card"><h2>${tt(P.n)}</h2><div class="mu">${tt("Seuraava treeni")}: <b>${tt(ss.l)}${ss.x?" "+ss.x:""}</b> (#${S.prog.n+1})</div></div>
+ <div class="card">${ss.e.map((x,i)=>{const dn=S.prog.done.includes(i),l=lastOf(x[0]);return `<div class="it"><div><b>${esc(exn(x[0]))}</b><div class="mu">${x[1]}×${x[2]}${l?" · "+tt("viimeksi")+" "+l.kg+" kg":""}</div></div><div>${dn?"✓":`<input id="pw${i}" type="number" inputmode="decimal" placeholder="kg" value="${l?l.kg:""}" style="width:70px"> <button class="b" data-pg="log:${i}" style="padding:8px 12px">✓</button>`}</div></div>`}).join("")}
+ <div class="row" style="margin-top:10px"><button class="b" data-pg="next">${tt("Päätä treeni")}</button><button class="b g" data-pg="stop">${tt("Lopeta ohjelma")}</button></div></div>`}
+$("progbox").addEventListener("change",e=>{const k=e.target.dataset.rc;if(!k)return;rec[k]=e.target.value;renderProg()});
+$("progbox").addEventListener("click",e=>{const a=e.target.dataset.pg;if(!a)return;const[c,v]=a.split(":");
+ if(c==="start"){addProgram(v);return}
+ else if(c==="stop")S.prog=null;
+ else if(c==="next"){S.prog.n++;S.prog.done=[]}
+ else if(c==="log"){const P=PR[S.prog.id],ss=P.s[S.prog.n%P.s.length],i=+v,x=ss.e[i];
+  S.w.push({id:uid(),d:today(),e:x[0],s:x[1],r:x[2],kg:+$("pw"+i).value||0,p:S.prog.id});S.prog.done.push(i);
+  if(S.prog.done.length>=ss.e.length){S.prog.n++;S.prog.done=[]}}
+ save();render()});
+async function vision(f,prompt,out){out.textContent=tt("Analysoidaan kuvaa…");
+ const{blob}=await shrink(f),sample=await (HOSTED?claude.use("sample"):null);
+ if(!sample){out.textContent=tt("Kuva-analyysi ei ole käytettävissä tässä näkymässä. Käytä kalorilaskuria.");return null}
+ const lim=await sample.limits();if(!lim||!lim.images){out.textContent=tt("Kuvien analysointi ei ole käytössä. Käytä kalorilaskuria.");return null}
+ const r=await sample(prompt+" Kirjoita tekstit kielellä: "+{fi:"suomi",sv:"ruotsi",en:"englanti"}[LANG]+".",{images:[blob],cache:false});
+ const m=r.text.replace(/```json|```/g,"").match(/\{[\s\S]*\}/);return{j:JSON.parse(m[0])}}
+// equipment photo
+$("eqb").onclick=()=>$("eqf").click();
+$("eqf").onchange=async e=>{const f=e.target.files[0];if(!f)return;const out=$("eqres");
+ try{const r=await vision(f,`Tunnista kuvasta kuntosalilaite tai harjoitusliike. Valitse sopivin liike tästä listasta täsmälleen annetulla nimellä: ${EX.map(x=>x[0]).join(", ")}. Jos mikään ei sovi, anna liikkeen yleinen nimi. Vastaa VAIN JSON: {"liike":"nimi","laite":"laitteen nimi tai tyhjä","vinkki":"yksi lyhyt suoritusvinkki"}.`,out);
+  if(!r)return;const j=r.j,c=exRec(String(j.liike||"").trim());
+  if(!c){out.textContent=tt("Liikettä ei tunnistettu.");return}
+  $("we").value=exn(c);const l=lastOf(c);if(l){$("ws").value=l.s;$("wr").value=l.r;$("wk").value=l.kg}
+  renderSug();out.innerHTML=`<span style="color:var(--tx)"><b>${esc(exn(c))}</b>${j.laite?" · "+esc(j.laite):""}</span><br>${esc(j.vinkki||"")}`
+ }catch(err){out.textContent=tt("Arviointi epäonnistui")+". "+tt("Yritä uudelleen.")}
+ e.target.value=""};
+// package scan
+$("pkb").onclick=()=>$("pkf").click();
+$("pkf").onchange=async e=>{const f=e.target.files[0];if(!f)return;const out=$("pkres");
+ try{const r=await vision(f,`Lue kuvasta elintarvikepakkauksen ravintosisältötaulukko ja tuotteen nimi. Vastaa VAIN JSON: {"nimi":"tuotteen nimi","kcal_100g":luku tai null,"annos_g":annoskoko grammoina tai null,"kcal_annos":luku tai null,"proteiini_100g":luku tai null,"hiilihydraatti_100g":luku tai null,"rasva_100g":luku tai null,"viivakoodi":"numerot tai tyhjä"}. Jos kcal ei näy mutta kJ näkyy, muunna (kJ/4,184). Älä keksi arvoja, käytä null jos ei näy.`,out);
+  if(!r)return;const j=r.j,k100=+j.kcal_100g||0,sg=+j.annos_g||0,ks=+j.kcal_annos||0;
+  if(!k100&&!(sg&&ks)){out.textContent=tt("Ravintosisältöä ei löytynyt kuvasta. Kokeile ottaa taulukko lähempää.");return}
+  const per=k100||ks/sg*100,nm2=j.nimi||tt("Pakkaus"),mp=+j.proteiini_100g||0,mc=+j.hiilihydraatti_100g||0,mf=+j.rasva_100g||0;
+  out.innerHTML=`<div style="color:var(--tx)"><b>${esc(nm2)}</b> \u00b7 ${Math.round(per)} kcal/100 g<div class="mu">${tt("P")} ${mp} \u00b7 ${tt("H")} ${mc} \u00b7 ${tt("R")} ${mf} / 100 g${j.viivakoodi?" \u00b7 "+esc(j.viivakoodi):""}</div><div class="row" style="margin-top:6px"><input id="pkg" type="number" inputmode="numeric" value="${sg||100}"><div id="pkk" style="align-self:center"></div><button class="b" id="pkadd">${tt("Lisää päivään")}</button></div><div class="row"><button class="b g" id="pksave">${tt("Tallenna omaksi tuotteeksi")}</button></div></div>`;
+  const gq=()=>+$("pkg").value||0,kc=()=>Math.round(per*gq()/100),upd=()=>{$("pkk").textContent=kc()+" kcal"};upd();$("pkg").oninput=upd;
+  $("pkadd").onclick=()=>{const g=gq();S.f.push({id:uid(),d:FDATE,n:nm2+" "+g+" g",k:kc(),p:+(mp*g/100).toFixed(1),c:+(mc*g/100).toFixed(1),f:+(mf*g/100).toFixed(1),amt:g,u:"g",src:"pk"+nm2});save();out.textContent=tt("Lisätty ✓");render()};
+  $("pksave").onclick=()=>{S.fp.push({id:uid(),n:nm2,k:Math.round(per),p:mp,c:mc,f:mf,l:0,pc:sg||0});save();out.textContent=tt("Tuote tallennettu ✓");render()}
+ }catch(err){out.textContent=tt("Arviointi epäonnistui")+". "+tt("Yritä uudelleen.")}
+ e.target.value=""};
+// records
+function records(){const m={};S.w.forEach(w=>{if(!w.kg)return;const e1=w.r>1?w.kg*(1+w.r/30):w.kg,o=m[w.e];
+ if(!o)m[w.e]={e:w.e,kg:w.kg,r:w.r,d:w.d,e1};else{if(w.kg>o.kg||(w.kg===o.kg&&w.r>o.r)){o.kg=w.kg;o.r=w.r;o.d=w.d}if(e1>o.e1)o.e1=e1}});
+ return Object.values(m).sort((a,b)=>b.e1-a.e1)}
+function renderRecs(){const l=records();
+ $("recs").innerHTML=l.length?l.map(x=>`<div class="it"><div><b>${esc(exn(x.e))}</b><div class="mu">${pd(x.d).toLocaleDateString(LOC[LANG])} · ${x.r} ${tt("toistoa")}</div></div><div style="text-align:right"><b>🏆 ${x.kg} kg</b><div class="mu">1RM ≈ ${Math.round(x.e1)} kg</div></div></div>`).join(""):'<div class="mu">'+tt("Ei vielä ennätyksiä.")+'</div>'}
+// export image
+let xbg=null,xc=null;
+function range(p){const n=new Date(),t=today();
+ if(p==="d")return[t,t];
+ if(p==="w"){const a=mon(n),b=new Date(a);b.setDate(b.getDate()+6);return[ds(a),ds(b)]}
+ if(p==="m")return[ds(new Date(n.getFullYear(),n.getMonth(),1)),ds(new Date(n.getFullYear(),n.getMonth()+1,0))];
+ return[n.getFullYear()+"-01-01",n.getFullYear()+"-12-31"]}
+function xlines(){const[a,b]=range($("xp").value),B={a,b},on=[...document.querySelectorAll("#xo input:checked")].map(i=>i.value),L=[];
+ const ws=S.w.filter(x=>inB(x,B)),cs=S.c.filter(x=>inB(x,B)),fs=S.f.filter(x=>inB(x,B)),sum=(l,k)=>l.reduce((s,x)=>s+x[k],0);
+ if(on.includes("t"))L.push([tt("Treenipäivät"),new Set(ws.map(x=>x.d)).size],[tt("Sarjoja"),sum(ws,"s")],[tt("Volyymi"),Math.round(ws.reduce((s,x)=>s+vol(x),0)).toLocaleString(LOC[LANG])+" kg"]);
+ if(on.includes("c"))L.push([tt("Cardio (min)"),sum(cs,"min")],["km",+sum(cs,"km").toFixed(1)],[tt("Cardio (kcal)"),sum(cs,"kcal")]);
+ if(on.includes("f")){const d=new Set(fs.map(x=>x.d)).size;L.push([tt("Kcal/päivä ka."),d?Math.round(sum(fs,"k")/d):"–"])}
+ if(on.includes("b")){const bw=S.bw.filter(x=>x.d<=b).sort((p,q)=>p.d.localeCompare(q.d)),l=bw[bw.length-1],st=bw.filter(x=>x.d<a).pop()||bw.filter(x=>x.d>=a)[0];
+  L.push([tt("Nykyinen paino"),l?l.kg+" kg"+(st&&st!==l?` (${l.kg-st.kg>0?"+":""}${(l.kg-st.kg).toFixed(1)})`:""):"–"])}
+ if(on.includes("r"))records().slice(0,3).forEach(x=>L.push(["🏆 "+exn(x.e),x.kg+" kg"]));
+ return L}
+function rr(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
+function xdraw(){const c=document.createElement("canvas");c.width=1080;c.height=1350;const g=c.getContext("2d");
+ if(xbg){const s=Math.max(1080/xbg.width,1350/xbg.height),w=xbg.width*s,h=xbg.height*s;g.drawImage(xbg,(1080-w)/2,(1350-h)/2,w,h)}
+ else{const gr=g.createLinearGradient(0,0,1080,1350);gr.addColorStop(0,"#e8590c");gr.addColorStop(1,"#1a1d21");g.fillStyle=gr;g.fillRect(0,0,1080,1350)}
+ const L=xlines(),p=$("xp").value,[a,b]=range(p),f=d=>pd(d).toLocaleDateString(LOC[LANG]);
+ const ph=Math.min(1050,190+L.length*78),y0=1350-ph-150;
+ g.fillStyle="rgba(0,0,0,.6)";rr(g,50,y0,980,ph,36);g.fill();
+ g.textBaseline="top";g.textAlign="left";g.fillStyle="#fff";g.font="700 54px system-ui,sans-serif";
+ g.fillText((S.p.name?S.p.name+" · ":"")+tt({d:"Päivä",w:"Viikko",m:"Kuukausi",y:"Vuosi"}[p]),90,y0+34);
+ g.font="400 30px system-ui,sans-serif";g.fillStyle="rgba(255,255,255,.75)";g.fillText(a===b?f(a):f(a)+" – "+f(b),90,y0+102);
+ L.forEach((l,i)=>{const y=y0+166+i*78;g.textAlign="left";g.fillStyle="rgba(255,255,255,.8)";g.font="400 36px system-ui,sans-serif";g.fillText(l[0],90,y);g.textAlign="right";g.fillStyle="#fff";g.font="700 40px system-ui,sans-serif";g.fillText(String(l[1]),990,y-2)});
+ const wm=tt("Tehty Velqor-sovelluksella");g.font="600 28px system-ui,sans-serif";const ww=g.measureText(wm).width,tw=48+12+ww,x0=540-tw/2;
+ g.fillStyle="rgba(0,0,0,.65)";rr(g,x0-26,1350-122,tw+52,76,38);g.fill();
+ try{g.drawImage(ICON_IMG,x0,1350-122+14,48,48)}catch(err){}
+ g.textAlign="left";g.textBaseline="middle";g.fillStyle="#fff";g.fillText(wm,x0+60,1350-84);
+ return c}
+$("xbg").onclick=()=>$("xbgf").click();
+$("xbgf").onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image();im.onload=()=>{xbg=im;$("xmk").click()};im.src=URL.createObjectURL(f);e.target.value=""};
+$("xmk").onclick=()=>{xc=xdraw();$("xim").src=xc.toDataURL("image/jpeg",.9);$("xim").classList.remove("hide");$("xsv").classList.remove("hide")};
+[$("xp"),$("xo")].forEach(el=>el.addEventListener("change",()=>{if(xc)$("xmk").click()}));
+$("xsv").onclick=async()=>{if(!xc)return;const d=HOSTED?await claude.use("downloads"):null,fn="velqor-"+today()+".png";
+ xc.toBlob(async b=>{if(d){try{await d.save({filename:fn,data:b})}catch(err){}return}
+  const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=fn;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)},"image/png")};
+// Apple Health import
+const AH={Running:"Juoksu",Walking:"Kävely",Hiking:"Retkeily",Cycling:"Pyöräily",Swimming:"Uinti",CrossCountrySkiing:"Hiihto",DownhillSkiing:"Laskettelu",Rowing:"Soutu",Soccer:"Jalkapallo",Tennis:"Tennis",Yoga:"Jooga",Climbing:"Kiipeily",Elliptical:"Crosstrainer",HighIntensityIntervalTraining:"Intervalli/HIIT",MixedCardio:"Intervalli/HIIT",CrossTraining:"Crossfit",Badminton:"Sulkapallo",Squash:"Squash",TableTennis:"Pöytätennis",Basketball:"Koripallo",Volleyball:"Lentopallo",Hockey:"Jääkiekko",SkatingSports:"Luistelu",StairClimbing:"Porraskone",Boxing:"Kuntonyrkkeily",MartialArts:"Kamppailulajit",Dance:"Tanssi",SocialDance:"Tanssi",Pilates:"Pilates",PaddleSports:"Melonta",Golf:"Golf",Pickleball:"Padel",Racquetball:"Squash"};
+$("ahb").onclick=()=>$("ahf").click();
+$("ahf").onchange=async e=>{const f=e.target.files[0];e.target.value="";if(!f)return;const out=$("ahres");out.textContent=tt("Luetaan…");
+ try{let blob=f;
+  if(/\.zip$/i.test(f.name)){await new Promise((ok,no)=>{if(window.JSZip)return ok();const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js";s.onload=ok;s.onerror=no;document.head.appendChild(s)});
+   const z=await JSZip.loadAsync(f),en=Object.keys(z.files).find(n=>/(^|\/)export\.xml$/.test(n));if(!en)throw 0;blob=await z.files[en].async("blob")}
+  const cut=ds(new Date(Date.now()-365*864e5)),have=new Set(S.c.map(c=>c.ah).filter(Boolean));let add=0,buf="";
+  const take=blk=>{const hd=blk.slice(0,blk.indexOf(">")),g=n=>(hd.match(new RegExp(n+'="([^"]*)"'))||[])[1];
+   const ty=(g("workoutActivityType")||"").replace("HKWorkoutActivityType",""),sd=g("startDate")||"";
+   if(!sd||sd.slice(0,10)<cut||/StrengthTraining|FunctionalStrength/.test(ty))return;
+   const key=ty+sd;if(have.has(key))return;
+   let du=+g("duration")||0;const u=g("durationUnit");if(u==="sec")du/=60;else if(u==="hr")du*=60;if(du<1)return;
+   let km=+g("totalDistance")||0,kc=+g("totalEnergyBurned")||0;if(km&&g("totalDistanceUnit")==="mi")km*=1.609;
+   let m;const re=/<WorkoutStatistics type="HKQuantityTypeIdentifier(\w+)"[^>]*?sum="([^"]+)"[^>]*?unit="([^"]+)"/g;
+   while(m=re.exec(blk)){if(m[1]==="ActiveEnergyBurned"&&!kc)kc=+m[2];else if(/^Distance/.test(m[1])&&!km)km=m[3]==="mi"?+m[2]*1.609:m[3]==="m"?+m[2]/1000:+m[2]}
+   const sp=AH[ty]||"Muu laji",s=SPORTS.find(x=>x[0]===sp);
+   S.c.push({id:uid(),d:sd.slice(0,10),sp,min:Math.round(du),km:+km.toFixed(2),kcal:Math.round(kc)||Math.round(s[3]*75*du/60),ah:key});have.add(key);add++};
+  const rd=blob.stream().getReader(),dec=new TextDecoder();
+  for(;;){const{done,value}=await rd.read();if(value)buf+=dec.decode(value,{stream:true});
+   for(;;){const i=buf.indexOf("<Workout ");if(i<0){buf=buf.slice(-12);break}
+    const gt=buf.indexOf(">",i);if(gt<0){buf=buf.slice(i);break}
+    let end;if(buf[gt-1]==="/")end=gt+1;else{const c=buf.indexOf("</Workout>",gt);if(c<0){buf=buf.slice(i);break}end=c+10}
+    take(buf.slice(i,end));buf=buf.slice(end)}
+   if(done)break}
+  save();render();out.textContent=tt("Tuotu")+": "+add
+ }catch(err){out.textContent=tt("Tiedoston luku epäonnistui. Valitse Applen vientitiedosto (export.zip tai export.xml).")}};
+// routines, plan, generator
+const DN={fi:["Ma","Ti","Ke","To","Pe","La","Su"],sv:["Mån","Tis","Ons","Tor","Fre","Lör","Sön"],en:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]};
+const PAT={1:[0],2:[0,3],3:[0,2,4],4:[0,1,3,4],5:[0,1,2,4,5],6:[0,1,2,3,4,5],7:[0,1,2,3,4,5,6]};
+const GD={1:[["full"]],2:[["up"],["low"]],3:[["push"],["pull"],["low"]],4:[["up"],["low"],["up"],["low"]],5:[["push"],["pull"],["low"],["up"],["cardio"]],6:[["push"],["pull"],["low"],["push"],["pull"],["low"]],7:[["push"],["pull"],["low"],["push"],["pull"],["low"],["cardio"]]};
+const GT=[["push","Työntö"],["pull","Veto"],["low","Alavartalo"],["up","Ylävartalo"],["full","Koko keho"],["chest","Rinta"],["back","Selkä"],["sh","Olkapäät"],["arm","Kädet"],["bi","Hauis"],["tri","Ojentajat"],["leg","Jalat"],["quad","Etureidet"],["ham","Takareidet"],["glute","Pakarat"],["calf","Pohkeet"],["core","Keskivartalo"],["cardio","Cardio"]];
+const POOL={chest:["Penkkipunnerrus","Vinopenkkipunnerrus","Käsipainopunnerrus","Rintaprässi","Rinnallevedot","Dippi","Punnerrus"],back:["Kulmasoutu","Ylätalja","Leuanveto","Käsipainosoutu","Alatalja","Maastaveto","Hyperextensio"],sh:["Pystypunnerrus","Sivunosto","Olkapääprässi","Takaolkapäännosto","Face pull"],bi:["Hauiskäännöt","Vasarakäännöt","Scott-curl","Talja-hauiskäännöt"],tri:["Ojentajapunnerrus","Ranskalainen punnerrus","Ojentajaojennus pään yli","Penkkidippi"],glute:["Pakarasilta","Romanialainen maastaveto","Bulgarialainen askelkyykky","Askelkyykky","Kahvakuulakeinahdus"],calf:["Pohkeennosto"],quad:["Kyykky","Jalkaprässi","Jalkojenojennus","Etukyykky","Askelkyykky"],ham:["Romanialainen maastaveto","Jalkojenkoukistus","Pakarasilta"],leg:["Kyykky","Romanialainen maastaveto","Jalkaprässi","Askelkyykky","Pakarasilta","Pohkeennosto","Jalkojenojennus","Jalkojenkoukistus","Etukyykky","Bulgarialainen askelkyykky"],core:["Vatsarutistus","Lankku","Jalannosto riipunnassa","Venäläinen kierto","Vatsarulla"],rear:["Face pull","Takaolkapäännosto"]};
+const REP={chest:8,back:8,sh:10,bi:12,tri:12,leg:8,core:15,rear:15,glute:10,calf:15,quad:8,ham:10};
+const TG={push:[["chest",2],["sh",2],["tri",2]],pull:[["back",3],["bi",2],["rear",1]],low:[["leg",5],["core",1]],up:[["chest",2],["back",2],["sh",1],["bi",1],["tri",1]],full:[["leg",2],["chest",1],["back",1],["sh",1],["core",1]],chest:[["chest",4]],back:[["back",4]],sh:[["sh",4]],arm:[["bi",2],["tri",2]],leg:[["leg",5]],core:[["core",3]],bi:[["bi",4]],tri:[["tri",4]],glute:[["glute",4]],quad:[["quad",4]],ham:[["ham",3]],calf:[["calf",1]]};
+const BIG=["Kyykky","Maastaveto","Penkkipunnerrus","Etukyykky","Romanialainen maastaveto","Pystypunnerrus","Kulmasoutu","Leuanveto","Vinopenkkipunnerrus","Jalkaprässi","Pakarasilta"];
+const restFor=x=>{const r=+x.r||10;let t=r<=5?180:r<=8?120:r<=12?90:60;if(!BIG.includes(x.n)&&t>90)t=90;return t};
+let HV={day:null,edit:false,sec:null};
+let gen={n:3,t:GD[3].map(a=>[...a]),sp:[]};
+const rtOf=id=>S.rt.find(r=>r.id===id);
+const GL={c:"Rinta",b:"Selkä",s:"Olkapäät",bi:"Hauis",tri:"Ojentajat",l:"Jalat",k:"Keskivartalo"};
+function focus(ex){const cnt={};ex.forEach(x=>{const g=POOL.bi.includes(x.n)?"bi":POOL.tri.includes(x.n)?"tri":(EX.find(e=>e[0]===x.n)||[])[3];if(g)cnt[g]=(cnt[g]||0)+1});return Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]).slice(0,3).map(g=>tt(GL[g])).join(" + ")}
+const tagEx=t=>{const o=new Set();TG[t].forEach(([p])=>POOL[p].forEach(n=>o.add(n)));return[...o]};
+function addProgram(id){HV.sec=null;const P=PR[id],pat={3:[0,2,4],4:[0,1,3,4],6:[0,1,2,3,4,5]},days={fb:3,ul:4,pp:6,st:3}[id];
+ S.rt=S.rt.filter(r=>r.g!==id);
+ const nms=P.s.map(ss=>{const f=focus(ss.e.map(x=>({n:x[0]})));return ss.l==="Treeni"||f.startsWith(tt(ss.l))?f:tt(ss.l)+" · "+f});
+ const ids=P.s.map((ss,i)=>{const nv=nms.filter(z=>z===nms[i]).length>1&&ss.x?nms[i]+" ("+ss.x+")":nms[i],r={id:uid(),n:nv,t:"s",g:id,ex:ss.e.map(x=>({n:x[0],s:x[1],r:x[2]}))};S.rt.push(r);return r.id});
+ S.plan=Array(7).fill(null);pat[days].forEach((d,i)=>S.plan[d]=ids[i%ids.length]);save();render()}
+function genWeek(){HV.sec=null;const used={};S.rt=S.rt.filter(r=>!r.g);S.plan=Array(7).fill(null);
+ gen.t.forEach((tags,i)=>{if(!tags.length)return;
+  const mus=tags.filter(t=>t!=="cardio"),need={},ex=[];
+  mus.forEach(t=>TG[t].forEach(([p,c])=>need[p]=Math.max(need[p]||0,c)));
+  Object.keys(need).forEach(p=>{const pl=POOL[p];for(let k=0;k<need[p];k++){const n=pl[((used[p]||0)+k)%pl.length];if(!ex.some(x=>x.n===n))ex.push({n,s:3,r:REP[p]})}used[p]=(used[p]||0)+need[p]});
+  const r={id:uid(),n:tags.map(t=>tt(GT.find(g=>g[0]===t)[1])).join(" + "),t:ex.length?"s":"c",g:"gen",ex};
+  if(tags.includes("cardio"))r.sp=gen.sp[i]||"Juoksu";
+  S.rt.push(r);S.plan[PAT[gen.n][i]]=r.id});
+ save();render()}
+function renderHome(){const h=$("homebox"),nw=new Date(),td=(nw.getDay()+6)%7,sel=HV.day===null?td:HV.day,mo=mon(nw),
+ dts=[0,1,2,3,4,5,6].map(i=>{const d=new Date(mo);d.setDate(d.getDate()+i);return ds(d)}),
+ dn=dts.map(d=>S.w.some(x=>x.d===d)||S.c.some(x=>x.d===d)),r=rtOf(S.plan[sel]),
+ line=x=>[...(x.ex||[]).map(e=>exn(e.n)).slice(0,4),...(x.sp?[spn(x.sp)]:[])].join(", "),
+ btn="width:100%;margin-top:10px;padding:14px;font-size:16px";
+ const plate=(h,l)=>`<div class="plate-wrap"><button class="plate" data-h="${h}" aria-label="${esc(l)}">▶</button><span>${l}</span></div>`;
+ const hero=S.sess?`<div class="hero-in"><div style="min-width:0"><div class="name">${esc(S.sess.name)}</div><div class="mu">${tt("käynnissä")}</div></div>${plate("resume",tt("Jatka treeniä"))}</div>`
+  :r?`<div class="hero-in"><div style="min-width:0"><div class="name">${esc(r.n)}</div><div class="mu">${esc(line(r))}</div></div>${plate("start:"+r.id,tt("Aloita treeni"))}</div>`
+  :`<div class="name">${tt("Lepopäivä")}</div><div class="mu">${tt(S.rt.length?"Ei suunniteltua treeniä tälle päivälle.":"Aloita luomalla ensimmäinen treeni tai koko treeniviikko.")}</div>`;
+ const genH=()=>`<div style="margin-top:12px;border-top:1px solid var(--bd);padding-top:10px"><select data-gn="1" style="width:100%">${[1,2,3,4,5,6,7].map(n=>`<option value="${n}" ${gen.n===n?"selected":""}>${n} ${tt("päivää viikossa")}</option>`).join("")}</select>
+ ${gen.t.map((tags,i)=>`<div style="margin:10px 0"><div class="mu">${tt("Päivä")} ${i+1} (${DN[LANG][PAT[gen.n][i]]})</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px">${GT.map(g=>`<button class="chip ${tags.includes(g[0])?"on":""}" data-g="${i}:${g[0]}">${tt(g[1])}</button>`).join("")}</div>${tags.includes("cardio")?`<select data-gs="${i}" style="margin-top:6px">${SPORTS.map(s=>`<option value="${s[0]}" ${(gen.sp[i]||"Juoksu")===s[0]?"selected":""}>${spn(s[0])}</option>`).join("")}</select>`:""}</div>`).join("")}
+ <div class="row"><button class="b" data-h="gen">${tt("Luo viikko")}</button></div><div class="mu">${tt("Voit muokata luotuja treenejä jälkeenpäin.")}</div></div>`;
+ h.innerHTML=`<div class="card hero"><h2>${sel===td?tt("Tänään"):DN[LANG][sel]}</h2>${hero}</div>
+ <div class="card"><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px">${DN[LANG].map((d,i)=>`<button class="chip ${i===sel?"on":""}" data-h="day:${i}" style="padding:8px 0;text-align:center;${i===td&&i!==sel?"border-color:var(--ac)":""}"><div>${d}</div><div style="font-size:15px">${dn[i]?"✅":S.plan[i]?"●":"·"}</div></button>`).join("")}</div>
+ <div class="row" style="margin-top:8px"><button class="chip" data-h="wedit" style="flex:none">${tt(HV.edit?"Valmis":"Muokkaa viikkoa")}</button></div>
+ ${HV.edit?DN[LANG].map((d,i)=>`<div class="it"><div style="width:44px">${d}</div><select data-hp="${i}" style="flex:1"><option value="">${tt("Lepo")}</option>${S.rt.map(x=>`<option value="${x.id}" ${S.plan[i]===x.id?"selected":""}>${esc(x.n)}</option>`).join("")}</select></div>`).join(""):""}</div>
+ <div class="card"><h2>${tt("Omat treenit")}</h2>${S.rt.length?S.rt.map(x=>`<div class="it"><div style="min-width:0"><b>${esc(x.n)}</b><div class="mu">${esc(line(x))}</div></div><div style="white-space:nowrap"><button class="b" data-h="start:${x.id}" style="padding:7px 12px">▶</button> <button class="b g" data-h="edit:${x.id}" style="padding:7px 12px">✎</button></div></div>`).join(""):`<div class="mu">${tt("Ei vielä treenejä.")}</div>`}</div>
+ <div class="card"><div class="row"><button class="b g" data-h="new">＋ ${tt("Uusi treeni")}</button><button class="b ${HV.sec==="gen"?"":"g"}" data-h="sec:gen">✨ ${tt("Luo treeniviikko")}</button><button class="b ${HV.sec==="prog"?"":"g"}" data-h="sec:prog">📚 ${tt("Valmiit ohjelmat")}</button></div>${HV.sec==="gen"?genH():""}</div>`;
+ $("progbox").style.display=HV.sec==="prog"?"":"none"}
+$("homebox").addEventListener("change",e=>{const d=e.target.dataset;
+ if(d.hp!==undefined){S.plan[+d.hp]=+e.target.value||null;save();renderHome()}
+ else if(d.gn!==undefined){gen.n=+e.target.value;gen.t=GD[gen.n].map(a=>[...a]);gen.sp=[];renderHome()}
+ else if(d.gs!==undefined)gen.sp[+d.gs]=e.target.value});
+$("homebox").addEventListener("click",e=>{const el=e.target.closest("[data-h],[data-g]");if(!el)return;const d=el.dataset;
+ if(d.g){const[i,t]=d.g.split(":"),a=gen.t[+i],k=a.indexOf(t);if(k>=0)a.splice(k,1);else a.push(t);renderHome();return}
+ const h=d.h;if(!h)return;const[c,v]=h.split(":");
+ if(c==="start")startSess(+v);else if(c==="resume")openOv();else if(c==="edit")openEd(+v);else if(c==="new")openEd(0);
+ else if(c==="del"){S.rt=S.rt.filter(r=>r.id!==+v);S.plan=S.plan.map(x=>x===+v?null:x);save();render()}
+ else if(c==="gen")genWeek();
+ else if(c==="day"){HV.day=+v;renderHome()}
+ else if(c==="wedit"){HV.edit=!HV.edit;renderHome()}
+ else if(c==="sec"){HV.sec=HV.sec===v?null:v;render()}});
+// workout session + timer
+let T={m:"idle",t0:0,acc:0,run:false,tot:0,rest:90,est:0},tmi=null,AC=null,ED=null,HD=null,HC=false,HS=false;
+const el=()=>T.acc+(T.run?Date.now()-T.t0:0),fmt=ms=>{const s=Math.floor(ms/1000);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")};
+const beepInit=()=>{try{AC=AC||new(window.AudioContext||window.webkitAudioContext)()}catch(e){}};
+function beep(){try{navigator.vibrate&&navigator.vibrate([200,100,200]);if(!AC)return;const o=AC.createOscillator(),g=AC.createGain();o.frequency.value=880;o.connect(g);g.connect(AC.destination);g.gain.setValueAtTime(.2,AC.currentTime);o.start();o.stop(AC.currentTime+.4)}catch(e){}}
+function nextEst(){const s=S.sess;if(!s)return 0;for(let i=0;i<s.ex.length;i++){const n=s.ex[i].s+(s.extra[i]||0);for(let k=0;k<n;k++)if(s.done[i+"_"+k]===undefined)return(+s.ex[i].r||10)*3}return 0}
+function tmStart(m,tot){T.m=m;T.tot=tot||0;T.acc=0;T.t0=Date.now();T.run=true;tick()}
+function tmStop(){T.m="idle";T.run=false;T.acc=0;tick()}
+function tmToggle(){beepInit();if(T.m==="idle"||T.m==="done"){T.est=nextEst();tmStart("work");return}if(T.run){T.acc=el();T.run=false}else{T.t0=Date.now();T.run=true}tick()}
+function tick(){const se=$("tse");if(S.sess&&se)se.textContent=fmt(Date.now()-S.sess.start);
+ const o=$("tm");if(!o)return;let ms=0,lab=tt("Valmis");
+ if(T.m==="work"){ms=el();lab=tt("Sarja käynnissä")+(T.est?" · ~"+T.est+" s":"")}
+ else if(T.m==="rest"){ms=Math.max(0,T.tot*1000-el());lab=tt("Tauko")+" · "+tt("suositus")+" "+T.rest+" s";if(ms<=0&&T.run){T.m="done";T.run=false;beep()}}
+ if(T.m==="done")lab=tt("Tauko ohi – seuraava sarja");
+ const pb=$("tmp");if(pb)pb.style.width=(T.m==="rest"&&T.tot?Math.min(100,ms/(T.tot*1000)*100):0)+"%";o.textContent=fmt(ms);$("tml").textContent=lab;$("tmb").textContent=T.run?"⏸":"▶"}
+function snap(){if(!S.sess)return;document.querySelectorAll("#ov [data-v]").forEach(i=>S.sess.v[i.dataset.v]=i.value)}
+function startSess(id){const r=rtOf(id);if(!r)return;if(S.sess){openOv();return}
+ S.sess={rid:id,name:r.n,t:r.t,sp:r.sp,cm:r.cm,start:Date.now(),ex:r.ex.map(x=>({...x})),done:{},extra:{},v:{}};save();tmStop();openOv()}
+function openOv(){HD=null;$("ov").classList.remove("hide");document.body.style.overflow="hidden";clearInterval(tmi);tmi=setInterval(tick,250);renderOv()}
+function closeOv(){HD=null;$("ov").classList.add("hide");document.body.style.overflow="";clearInterval(tmi);render()}
+function renderOv(){const s=S.sess;if(!s)return;snap();
+ const head=`<div class="card"><div class="row" style="align-items:center"><div style="flex:3 1 150px"><b style="font-size:18px">${esc(s.name)}</b><div class="mu">⏱ <span id="tse">0:00</span></div></div><button class="b g" data-o="back">${tt("Takaisin")}</button><button class="b" data-o="fin">${tt("Lopeta treeni")}</button></div></div>`;
+ const cc=s.sp?`<div class="card"><b>🏃 ${esc(spn(s.sp))}${s.cm?" · ~"+s.cm+" min":""}</b><div class="row" style="margin-top:8px"><input data-v="cmin" type="number" inputmode="numeric" placeholder="${tt("Kesto min")}" value="${s.v.cmin||""}"><input data-v="ckm" type="number" inputmode="decimal" placeholder="${tt("Matka km")}" value="${s.v.ckm||""}"></div></div>`:"";
+ if(s.t==="c"){$("ov").innerHTML=`<div>${head}${cc}</div>`;tick();return}
+ const exh=s.ex.map((x,ei)=>{const last=lastOf(x.n),n=x.s+(s.extra[ei]||0),rows=[];
+  for(let si=0;si<n;si++){const key=ei+"_"+si,dn=s.done[key]!==undefined,kv=s.v["k"+key]??(last?last.kg:""),rv=s.v["r"+key]??x.r;
+   rows.push(`<div class="setr ${dn?"dn":""}"><span class="mu" style="width:18px">${si+1}</span><input data-v="r${key}" type="number" inputmode="numeric" value="${rv}"><span class="mu">×</span><button class="chip st" data-o="kg:${key}:-2.5" aria-label="-2.5 kg">−</button><input data-v="k${key}" type="number" inputmode="decimal" placeholder="kg" value="${kv}" style="flex:1.5"><button class="chip st" data-o="kg:${key}:2.5" aria-label="+2.5 kg">+</button><button class="b ${dn?"":"g"}" data-o="set:${ei}:${si}">✓</button></div>`)}
+  return `<div class="card"><b>${esc(exn(x.n))}</b><div class="mu">${x.s}×${x.r}${last?" · "+tt("viimeksi")+" "+last.kg+" kg":""} · ${tt("tauko")} ~${restFor(x)} s · ${tt("sarja")} ~${(+x.r||10)*3} s</div>${rows.join("")}<div style="display:flex;gap:8px;margin-top:8px"><button class="chip on" data-o="rep:${ei}">↻ ${tt("Toista edellinen")}</button><button class="chip" data-o="more:${ei}">+ ${tt("Sarja")}</button></div></div>`}).join("");
+ $("ov").innerHTML=`<div>${head}<div class="card" style="position:sticky;top:calc(40px + env(safe-area-inset-top,0px));z-index:2"><div class="tm" id="tm">0:00</div><div class="mu" id="tml" style="text-align:center"></div><div class="bar"><i id="tmp" style="width:0"></i></div><div class="row" style="margin-top:8px"><button class="b" id="tmb" data-o="tg">▶</button><button class="b g" data-o="tstop">■</button><button class="b g" data-o="m15">−15</button><button class="b g" data-o="p15">+15</button></div></div>${exh}${cc}</div>`;tick()}
+function finishSess(){snap();const s=S.sess,hid=uid();let st=[],prs=[];const dm=Math.max(1,Math.round((Date.now()-s.start)/6e4));
+ if(s.t!=="c"){const ids=Object.values(s.done),es=S.w.filter(w=>ids.includes(w.id));es.forEach(w=>w.h=hid);
+  prs=[...new Set(es.map(w=>w.e))].filter(n=>{const mx=Math.max(0,...es.filter(w=>w.e===n).map(w=>w.kg)),pm=Math.max(0,...S.w.filter(w=>w.e===n&&!ids.includes(w.id)).map(w=>w.kg));return mx>pm&&pm>0});
+  st=[[tt("Kesto min"),dm],[tt("Sarjoja"),es.length],[tt("Volyymi"),Math.round(es.reduce((a,w)=>a+vol(w),0)).toLocaleString(LOC[LANG])+" kg"]]}
+ if(s.sp){const cm=Math.round(+s.v.cmin||0)||(s.t==="c"?dm:0),km=+s.v.ckm||0;
+  if(cm){const sp=SPORTS.find(x=>x[0]===s.sp)||SPORTS[0],lw=[...S.bw].sort((a,b)=>a.d.localeCompare(b.d)).pop();
+   S.c.push({id:uid(),d:today(),sp:sp[0],min:cm,km,kcal:Math.round(sp[3]*(lw?lw.kg:75)*cm/60),h:hid});
+   st.push([tt("Cardio (min)"),cm]);if(km)st.push(["km",km])}}
+ if(S.w.some(w=>w.h===hid)||S.c.some(c=>c.h===hid))S.hist.push({id:hid,d:today(),n:s.name,rid:s.rid,start:s.start,min:dm});
+ S.sess=null;save();tmStop();
+ $("ov").innerHTML=`<div><div class="card"><h2>🏁 ${tt("Treeni valmis")}</h2><div class="grid">${st.map(x=>`<div class="stat"><div class="mu">${x[0]}</div><div class="big">${x[1]}</div></div>`).join("")}</div>${prs.map(n=>`<div style="margin-top:8px">🏆 ${tt("Uusi ennätys")}: <b>${esc(exn(n))}</b></div>`).join("")}<div class="row" style="margin-top:10px"><button class="b" data-o="close">${tt("Sulje")}</button>${S.hist.some(r=>r.id===hid)?`<button class="b g" data-o="hopen:${hid}">${tt("Avaa historiasta")}</button>`:""}</div></div></div>`}
+// routine editor
+function openEd(id){HD=null;const r=id?rtOf(id):null;ED=r?JSON.parse(JSON.stringify(r)):{id:0,n:"",t:"s",ex:[]};$("ov").classList.remove("hide");document.body.style.overflow="hidden";clearInterval(tmi);renderEd()}
+function snapEd(){document.querySelectorAll("#ov [data-e]").forEach(i=>{const k=i.dataset.e;if(k==="name")ED.n=i.value;else if(k==="t")ED.t=i.value;else if(k==="sp")ED.sp=i.value;else if(k==="cm")ED.cm=+i.value||0;else if(k[0]==="s")ED.ex[+k.slice(1)].s=+i.value||1;else if(k[0]==="r")ED.ex[+k.slice(1)].r=+i.value||1})}
+function addEx(){const p=$("eadd");if(p&&p.value.trim())ED.ex.push({n:exRec(p.value.trim()),s:3,r:10})}
+function renderEd(){const E=ED;$("exl").innerHTML=EX.map(x=>`<option value="${esc(x[LI(LANG)])}">`).join("");
+ $("ov").innerHTML=`<div><div class="card"><h2>${tt(E.id?"Muokkaa treeniä":"Uusi treeni")}</h2><div class="row"><input data-e="name" placeholder="${tt("Treenin nimi")}" value="${esc(E.n)}"></div>`+
+  E.ex.map((x,i)=>`<div class="it"><div style="flex:1;min-width:0"><b>${esc(exn(x.n))}</b></div><div style="display:flex;gap:4px;align-items:center"><input data-e="s${i}" type="number" value="${x.s}" style="width:52px"><span class="mu">×</span><input data-e="r${i}" type="number" value="${x.r}" style="width:52px"><button class="x" data-o="up:${i}">↑</button><button class="x" data-o="dn:${i}">↓</button><button class="x" data-o="rm:${i}">✕</button></div></div>`).join("")+
+  `<div class="row" style="margin-top:8px"><input id="eadd" list="exl" autocomplete="off" placeholder="${tt("Lisää liike")}" style="flex:3 1 140px"><button class="b g" data-o="eadd">+</button></div>
+  <div class="mu" style="margin-top:8px">${tt("Lihasryhmä")}</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin:4px 0">${GT.filter(g=>g[0]!=="cardio").map(g=>`<button class="chip ${E.mg===g[0]?"on":""}" data-o="mg:${g[0]}">${tt(g[1])}</button>`).join("")}</div>
+  ${E.mg?`<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px">${tagEx(E.mg).map(n=>`<button class="chip" data-o="ad:${esc(n)}">+ ${esc(exn(n))}</button>`).join("")}</div>`:""}
+  <div class="mu" style="margin-top:8px">${tt("Cardio")} (${tt("valinnainen")})</div>
+  <div class="row"><select data-e="sp"><option value="">${tt("Ei cardiota")}</option>${SPORTS.map(s=>`<option value="${s[0]}" ${E.sp===s[0]?"selected":""}>${spn(s[0])}</option>`).join("")}</select><input data-e="cm" type="number" inputmode="numeric" placeholder="${tt("Kesto min")}" value="${E.cm||""}"></div>
+  <div class="row" style="margin-top:10px"><button class="b" data-o="esave">${tt("Tallenna")}</button><button class="b g" data-o="close">${tt("Peruuta")}</button></div>${E.id?`<div class="row" style="margin-top:6px"><button class="b g" data-o="edel" style="color:#e03131">${tt("Poista treeni")}</button></div>`:""}</div></div>`}
+$("ov").addEventListener("change",e=>{if(ED&&e.target.dataset.e==="t"){snapEd();renderEd()}});
+$("ov").addEventListener("click",e=>{const o=e.target.dataset.o;if(!o)return;const[c,a,b]=o.split(":"),s=S.sess;
+ if(c==="close"){ED=null;closeOv();return}
+ if(c==="hopen"){openHist("h"+a);return}
+ if(HD){histAct(c);return}
+ if(ED){snapEd();
+  if(c==="up"||c==="dn"){const i=+a,j=c==="up"?i-1:i+1;if(j>=0&&j<ED.ex.length)[ED.ex[i],ED.ex[j]]=[ED.ex[j],ED.ex[i]];renderEd()}
+  else if(c==="rm"){ED.ex.splice(+a,1);renderEd()}
+  else if(c==="mg"){ED.mg=ED.mg===a?"":a;renderEd()}
+  else if(c==="ad"){ED.ex.push({n:a,s:3,r:10});renderEd()}
+  else if(c==="eadd"){addEx();renderEd()}
+  else if(c==="edel"){S.rt=S.rt.filter(r=>r.id!==ED.id);S.plan=S.plan.map(x=>x===ED.id?null:x);save();ED=null;closeOv()}
+  else if(c==="esave"){addEx();const E=ED;E.n=E.n.trim()||tt("Treeni");if(!E.ex.length&&!E.sp){alert(tt("Lisää vähintään yksi liike tai cardio"));return}E.t=E.ex.length?"s":"c";delete E.mg;
+   if(E.id){const i=S.rt.findIndex(r=>r.id===E.id);delete E.g;if(i>=0)S.rt[i]=E}else{E.id=uid();S.rt.push(E)}
+   save();ED=null;closeOv()}
+  return}
+ if(!s)return;
+ if(c==="back")closeOv();
+ else if(c==="fin")finishSess();
+ else if(c==="tg")tmToggle();
+ else if(c==="tstop")tmStop();
+ else if(c==="m15"||c==="p15"){if(T.m==="rest"){T.tot=Math.max(5,T.tot+(c==="p15"?15:-15));tick()}}
+ else if(c==="more"){snap();s.extra[+a]=(s.extra[+a]||0)+1;save();renderOv()}
+ else if(c==="kg"){const i=document.querySelector('#ov [data-v="k'+a+'"]');if(i){const v=Math.max(0,Math.round(((+i.value||0)+ +b)*100)/100);i.value=v;s.v["k"+a]=String(v)}}
+ else if(c==="set")togSet(+a,+b);
+ else if(c==="rep"){snap();const ei=+a,x=s.ex[ei],n=x.s+(s.extra[ei]||0);let sv=0,tg=-1;
+  for(let i=0;i<n;i++){if(s.done[ei+"_"+i]!==undefined)sv=i;else if(tg<0)tg=i}
+  if(tg<0){s.extra[ei]=(s.extra[ei]||0)+1;tg=n}
+  const rv=s.v["r"+ei+"_"+sv]??x.r,kv=s.v["k"+ei+"_"+sv]??((lastOf(x.n)||{}).kg??"");
+  s.v["r"+ei+"_"+tg]=rv;s.v["k"+ei+"_"+tg]=kv;
+  [["r",rv],["k",kv]].forEach(([q,v])=>{const i=document.querySelector('#ov [data-v="'+q+ei+"_"+tg+'"]');if(i)i.value=v});
+  togSet(ei,tg,true)}});
+function togSet(ei,si,skip){const s=S.sess;if(!skip)snap();const key=ei+"_"+si,x=s.ex[ei];
+ if(s.done[key]!==undefined){S.w=S.w.filter(w=>w.id!==s.done[key]);delete s.done[key]}
+ else{const kg=+s.v["k"+key]||0,rp=+s.v["r"+key]||x.r,dur=T.m==="work"?Math.round(el()/1000):0,id=uid();
+  S.w.push({id,d:today(),e:x.n,s:1,r:rp,kg,rt:s.rid,sec:dur||undefined});s.done[key]=id;
+  T.rest=restFor({n:x.n,r:rp});beepInit();tmStart("rest",T.rest)}
+ save();renderOv()}
+function renderWeek(){const n=new Date(),mo=mon(n),f=LOC[LANG],dts=[0,1,2,3,4,5,6].map(i=>{const d=new Date(mo);d.setDate(d.getDate()+i);return ds(d)});
+ const p0=new Date(mo),p1=new Date(mo);p0.setDate(p0.getDate()-7);p1.setDate(p1.getDate()-1);
+ const C={a:dts[0],b:dts[6]},A={a:ds(p0),b:ds(p1)},ws=S.w.filter(x=>inB(x,C)),wp=S.w.filter(x=>inB(x,A)),cs=S.c.filter(x=>inB(x,C));
+ const vo=ws.reduce((a,x)=>a+vol(x),0),vp=wp.reduce((a,x)=>a+vol(x),0),sets=ws.reduce((a,x)=>a+x.s,0),cm=cs.reduce((a,x)=>a+x.min,0);
+ const act=dts.map(d=>S.w.some(x=>x.d===d)||S.c.some(x=>x.d===d)),done=act.filter(Boolean).length,pl=S.plan.filter(Boolean).length;
+ const prs=[...new Set(ws.map(w=>w.e))].filter(e=>{const mx=Math.max(...ws.filter(w=>w.e===e).map(w=>w.kg)),pm=Math.max(0,...S.w.filter(w=>w.e===e&&w.d<dts[0]).map(w=>w.kg));return mx>pm&&pm>0}).length;
+ const dl=vp?`<div class="mu" style="color:${vo>=vp?"var(--ok)":"var(--mu)"}">${vo>=vp?"▲":"▼"} ${Math.abs(Math.round((vo-vp)/vp*100))} % ${tt("viime viikkoon verrattuna")}</div>`:"";
+ $("wkc").innerHTML=`<h2>${tt("Tämä viikko")}</h2><div class="row" style="align-items:flex-end;margin-bottom:12px"><div style="flex:none"><span class="big" style="font-size:52px">${done}</span><span class="mu" style="font-size:18px">${pl?" / "+pl:""}</span><div class="mu">${tt("Treenipäivät")}</div></div><div style="display:flex;gap:6px;justify-content:flex-end;flex:1 1 160px">${DN[LANG].map((d,i)=>`<div style="text-align:center;width:30px"><div class="mu">${d.slice(0,2)}</div><div style="font-size:20px;line-height:1.3;color:${act[i]?"var(--ac)":"var(--mu)"}">${act[i]?"●":S.plan[i]?"○":"·"}</div></div>`).join("")}</div></div><div class="grid"><div class="stat"><div class="mu">${tt("Volyymi")}</div><div class="big">${Math.round(vo).toLocaleString(f)}<span class="mu"> kg</span></div>${dl}</div><div class="stat"><div class="mu">${tt("Sarjoja")}</div><div class="big">${sets}</div></div><div class="stat"><div class="mu">${tt("Cardio (min)")}</div><div class="big">${cm}</div></div><div class="stat"><div class="mu">${tt("Ennätykset")}</div><div class="big">${prs?"🏆 ":""}${prs}</div></div></div>`}
+// history
+let HI={n:30,x:""};
+function buildHist(){const act=S.sess?new Set(Object.values(S.sess.done)):new Set(),m=new Map(),L=[];
+ S.hist.forEach(r=>{const it={key:"h"+r.id,d:r.d,t0:r.start||0,n:r.n,min:r.min,rec:r,sets:[],cardio:[]};m.set(r.id,it);L.push(it)});
+ const grp=(k,d,n,t0)=>{let it=m.get(k);if(!it){it={key:"g"+k,d,t0,n,sets:[],cardio:[]};m.set(k,it);L.push(it)}return it};
+ S.w.forEach(w=>{if(act.has(w.id))return;const it=w.h?m.get(w.h):grp(w.d+"|"+(w.rt||0),w.d,w.rt?((rtOf(w.rt)||{}).n||tt("Treeni")):tt("Vapaa kirjaus"),w.id);if(it)it.sets.push(w)});
+ S.c.forEach(c=>{const it=c.h?m.get(c.h):grp(c.d+"|0",c.d,tt("Vapaa kirjaus"),c.id);if(it)it.cardio.push(c)});
+ L.forEach(it=>{if(!it.rec&&!it.sets.length&&it.cardio.length)it.n=tt("Cardio")+" \u00b7 "+[...new Set(it.cardio.map(c=>spn(c.sp)))].join(", ")});
+ return L.filter(it=>it.sets.length||it.cardio.length).sort((a,b)=>b.d.localeCompare(a.d)||b.t0-a.t0)}
+function renderHistTab(){const L=buildHist(),f=LOC[LANG],exs=[...new Set(L.flatMap(it=>it.sets.map(w=>w.e)))].sort((a,b)=>exn(a).localeCompare(exn(b)));
+ $("hx").innerHTML=`<option value="">${tt("Kaikki liikkeet")}</option>`+exs.map(n=>`<option value="${esc(n)}" ${HI.x===n?"selected":""}>${esc(exn(n))}</option>`).join("");
+ const F=HI.x?L.filter(it=>it.sets.some(w=>w.e===HI.x)):L,sh=F.slice(0,HI.n);let mo="";
+ $("hlist").innerHTML=sh.length?sh.map(it=>{const ym=it.d.slice(0,7),hd=ym!==mo?(mo=ym,`<div class="mu" style="margin:10px 0 2px;text-transform:capitalize">${pd(it.d).toLocaleDateString(f,{month:"long",year:"numeric"})}</div>`):"";
+  const ne=new Set(it.sets.map(w=>w.e)).size,ss=it.sets.reduce((a,w)=>a+w.s,0),vo=Math.round(it.sets.reduce((a,w)=>a+vol(w),0)),cm=it.cardio.reduce((a,c)=>a+c.min,0);
+  return hd+`<div class="it" data-hk="${esc(it.key)}" style="cursor:pointer"><div style="min-width:0;pointer-events:none"><b>${esc(it.n)}</b><div class="mu">${pd(it.d).toLocaleDateString(f,{weekday:"short",day:"numeric",month:"numeric"})} \u00b7 ${[ne?ne+" "+tt("liikett\u00e4"):"",ss?ss+" "+tt("sarjaa"):"",vo?vo.toLocaleString(f)+" kg":"",cm?cm+" min cardio":"",it.min?it.min+" min":""].filter(Boolean).join(" \u00b7 ")}</div></div><div class="mu" style="pointer-events:none">\u203a</div></div>`}).join("")+(F.length>HI.n?`<button class="b g" data-hm="1" style="width:100%;margin-top:8px">${tt("N\u00e4yt\u00e4 lis\u00e4\u00e4")}</button>`:""):`<div class="mu">${tt("Ei viel\u00e4 tallennettuja treenej\u00e4.")}</div>`}
+$("hx").onchange=()=>{HI.x=$("hx").value;HI.n=30;renderHistTab()};
+$("hlist").addEventListener("click",e=>{const k=e.target.closest("[data-hk]");if(k){openHist(k.dataset.hk);return}if(e.target.dataset.hm){HI.n+=30;renderHistTab()}});
+function openHist(k){HD=k;HC=false;HS=false;ED=null;$("ov").classList.remove("hide");document.body.style.overflow="hidden";clearInterval(tmi);renderHist()}
+function renderHist(){const it=buildHist().find(x=>x.key===HD);if(!it){closeOv();return}
+ const ex=[];it.sets.forEach(w=>{let g=ex.find(x=>x.e===w.e);if(!g)ex.push(g={e:w.e,l:[]});g.l.push(w)});
+ const rc=records(),f=LOC[LANG],ss=it.sets.reduce((a,w)=>a+w.s,0),vo=Math.round(it.sets.reduce((a,w)=>a+vol(w),0)),
+ st=[[tt("Kesto min"),it.min||"\u2013"],[tt("Liikkeit\u00e4"),ex.length],[tt("Sarjoja"),ss],[tt("Volyymi"),vo.toLocaleString(f)+" kg"]];
+ $("ov").innerHTML=`<div><div class="card"><div class="row" style="align-items:center"><div style="flex:3 1 150px"><b style="font-size:18px">${esc(it.n)}</b><div class="mu">${pd(it.d).toLocaleDateString(f,{weekday:"long",day:"numeric",month:"long",year:"numeric"})}</div></div><button class="b g" data-o="close">${tt("Sulje")}</button></div><div class="grid" style="margin-top:8px">${st.map(x=>`<div class="stat"><div class="mu">${x[0]}</div><div class="big" style="font-size:20px">${x[1]}</div></div>`).join("")}</div></div>`+
+ ex.map(g=>{let n=0;const best=Math.max(...g.l.map(w=>w.kg)),top=(rc.find(r=>r.e===g.e)||{}).kg,v=Math.round(g.l.reduce((a,w)=>a+vol(w),0));
+  return `<div class="card"><div style="display:flex;justify-content:space-between;gap:8px"><b>${esc(exn(g.e))}</b><span class="mu">${v?v.toLocaleString(f)+" kg":""}${best&&best===top?" \u00b7 \ud83c\udfc6":""}</span></div>`+g.l.map(w=>{const a=n+1;n+=w.s;return `<div class="it"><span class="mu" style="width:40px">${w.s>1?a+"\u2013"+n:a}</span><span style="flex:1">${w.s>1?w.s+" \u00d7 ":""}${w.r}${w.kg?" \u00d7 "+w.kg+" kg":" "+tt("toistoa")}</span><span class="mu">${w.sec?w.sec+" s":""}</span></div>`}).join("")+`</div>`}).join("")+
+ it.cardio.map(c=>`<div class="card">\ud83c\udfc3 <b>${esc(spn(c.sp))}</b><div class="mu">${c.min} min${c.km?" \u00b7 "+c.km+" km":""} \u00b7 ~${c.kcal} kcal</div></div>`).join("")+
+ `<div class="row"><button class="b g" data-o="hrep">${tt(HS?"Tallennettu \u2713":"Tallenna pohjaksi")}</button><button class="b g" data-o="hdel" style="color:#e03131">${tt(HC?"Vahvista poisto":"Poista treeni")}</button></div></div>`}
+function histAct(c){const it=buildHist().find(x=>x.key===HD);if(!it)return;
+ if(c==="hdel"){if(!HC){HC=true;renderHist();return}
+  const ids=new Set(it.sets.map(w=>w.id)),cs=new Set(it.cardio.map(x=>x.id));S.w=S.w.filter(w=>!ids.has(w.id));S.c=S.c.filter(x=>!cs.has(x.id));if(it.rec)S.hist=S.hist.filter(r=>r.id!==it.rec.id);save();closeOv()}
+ else if(c==="hrep"&&!HS){const ex=[];it.sets.forEach(w=>{let g=ex.find(x=>x.n===w.e);if(!g)ex.push(g={n:w.e,s:0,r:w.r});g.s+=w.s;g.r=w.r});const r={id:uid(),n:it.n,t:ex.length?"s":"c",ex};if(it.cardio[0])r.sp=it.cardio[0].sp;S.rt.push(r);save();HS=true;renderHist()}}
+// brand icon
+const ICON='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">'+'<defs><linearGradient id="pg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2d2b78"/><stop offset="1" stop-color="#110e33"/></linearGradient></defs><rect width="64" height="64" rx="15" fill="url(#pg)"/><path d="M35.75 45.25L31 50L12 31L31 12L50 31L45.25 35.75" fill="none" stroke="#ff7a45" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M25.5 26L31 37L36.5 26" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M37 37L52 52" fill="none" stroke="#ffc247" stroke-width="5.5" stroke-linecap="round"/>'+'</svg>';
+$("bic").innerHTML=ICON;
+const ICON_IMG=new Image();ICON_IMG.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(ICON);
+if(S.sess)setTimeout(openOv,0);
+function render(){fillDb();fillSp();renderTrain();renderCardio();renderFood();renderStats();renderProf();renderProg();renderSug();renderRecs();renderHome();renderHistTab();renderWeek()}
+$("lang").value=LANG;
+$("lang").onchange=()=>{if(ED)snapEd();LANG=$("lang").value;S.lang=LANG;save();tr();render();if(!$("ov").classList.contains("hide")){if(HD)renderHist();else if(ED)renderEd();else if(S.sess)renderOv()}};
+tr();render();
+</script>
+</body>
+</html>
