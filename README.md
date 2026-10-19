@@ -12,10 +12,14 @@ A single-page workout, cardio and nutrition tracker. No build step, no backend �
 - Workout history, records, weekly summary and period statistics
 - Shareable summary image with your own background photo
 - Finnish, Swedish and English
+- Installable on your home screen with the Velqor icon (iOS: Share → Add to Home Screen; Android: install prompt) and a share button; works offline after the first visit
 
 ## Running it
 Open `index.html` in a browser, or serve the folder (`python3 -m http.server`).
 To publish with GitHub Pages: **Settings → Pages → Deploy from a branch → `main` / root**.
+
+## Home screen app
+The repo includes `manifest.webmanifest`, `sw.js` and the icons in `assets/` (`apple-touch-icon.png`, `icon-192.png`, `icon-512.png`, `icon-512-maskable.png`). The install button appears on phones when the site is opened in a normal browser tab over HTTPS (GitHub Pages is fine). If you change `index.html` and don't see updates, bump `V` in `sw.js`.
 
 ## Your data
 Everything is stored in your browser's `localStorage` on the device you use. Clearing site data deletes it, and it is not synced between devices.
