@@ -21,6 +21,9 @@ To publish with GitHub Pages: **Settings → Pages → Deploy from a branch → 
 ## Home screen app
 The repo includes `manifest.webmanifest`, `sw.js` and the icons in `assets/` (`apple-touch-icon.png`, `icon-192.png`, `icon-512.png`, `icon-512-maskable.png`). The install button appears on phones when the site is opened in a normal browser tab over HTTPS (GitHub Pages is fine). If you change `index.html` and don't see updates, bump `V` in `sw.js`.
 
+## Rest-timer sound and notifications
+The rest timer plays a three-tone chime using Web Audio in the *ambient* audio session, so music from Spotify or Apple Music keeps playing (the iPhone silent switch mutes it). During a workout the screen is kept awake. If you allow notifications (installed home-screen app only on iOS), a notification is shown when a rest ends while the app is in the background. Browsers freeze background pages, so on iPhone this works only while the app is still running; a reliable alert while the app is closed would need a push server or a native app.
+
 ## Your data
 Everything is stored in your browser's `localStorage` on the device you use. Clearing site data deletes it, and it is not synced between devices.
 
