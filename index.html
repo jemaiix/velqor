@@ -612,7 +612,7 @@ function renderOv(){const s=S.sess;if(!s)return;snap();$("exl").innerHTML=EX.map
    rows.push(`<div class="setr ${dn?"dn":""}"><div class="stp"><button class="chip st" data-o="rp:${key}:-1" aria-label="-1">\u2212</button><input data-v="r${key}" type="number" inputmode="numeric" value="${rv}" aria-label="reps"><button class="chip st" data-o="rp:${key}:1" aria-label="+1">+</button></div><div class="stp"><button class="chip st" data-o="kg:${key}:-2.5" aria-label="-2.5 kg">\u2212</button><input data-v="k${key}" type="number" inputmode="decimal" placeholder="kg" value="${kv}" aria-label="kg"><button class="chip st" data-o="kg:${key}:2.5" aria-label="+2.5 kg">+</button></div><button class="b ${dn?"":"g"}" data-o="set:${ei}:${si}" aria-label="set ${si+1}">\u2713</button></div>`)}
   return `<div class="card">${exHead(s,x,ei)}<div class="mu">${x.s}×${x.r}${last?" · "+tt("viimeksi")+" "+last.kg+" kg":""} · ${tt("sarja")} ~${(+x.r||10)*3} s</div><div style="display:flex;align-items:center;gap:8px;margin:6px 0"><span class="mu">⏱ ${tt("Tauko")}</span><button class="chip" data-o="rst:${ei}:-15" style="min-width:40px">−</button><b>${restFor(x)} s</b><button class="chip" data-o="rst:${ei}:15" style="min-width:40px">+</button></div><div class="setl"><span>${tt("toistoa")}</span><span>kg</span><span></span></div>${rows.join("")}<div style="display:flex;gap:8px;margin-top:8px"><button class="chip on" data-o="rep:${ei}">↻ ${tt("Toista edellinen")}</button><button class="chip" data-o="sdel:${ei}">− ${tt("Sarja")}</button><button class="chip" data-o="more:${ei}">+ ${tt("Sarja")}</button></div></div>`}).join("");
  $("ov").innerHTML=`<div>${head}<div class="card" style="position:sticky;top:calc(40px + env(safe-area-inset-top,0px));z-index:2"><div class="tm" id="tm">0:00</div><div class="mu" id="tml" style="text-align:center"></div><div class="bar"><i id="tmp" style="width:0"></i></div><div class="row" style="margin-top:8px"><button class="b" id="tmb" data-o="tg">▶</button><button class="b g" data-o="tstop">■</button><button class="b g" data-o="m15">−15</button><button class="b g" data-o="p15">+15</button></div>${notifChip()}</div>${exh}${addCard(s)}${cc}</div>`;tick()}
-function finishSess(){snap();const s=S.sess,hid=uid();let st=[],prs=[];const dm=Math.max(1,Math.round((Date.now()-s.start)/6e4));
+function finishSess(){syncDone(S.sess);const s=S.sess,hid=uid();let st=[],prs=[];const dm=Math.max(1,Math.round((Date.now()-s.start)/6e4));
  if(s.t!=="c"){const ids=Object.values(s.done),es=S.w.filter(w=>ids.includes(w.id));es.forEach(w=>w.h=hid);
   prs=[...new Set(es.map(w=>w.e))].filter(n=>{const mx=Math.max(0,...es.filter(w=>w.e===n).map(w=>w.kg)),pm=Math.max(0,...S.w.filter(w=>w.e===n&&!ids.includes(w.id)).map(w=>w.kg));return mx>pm&&pm>0});
   st=[[tt("Kesto min"),dm],[tt("Sarjoja"),es.length],[tt("Volyymi"),Math.round(es.reduce((a,w)=>a+vol(w),0)).toLocaleString(LOC[LANG])+" kg"]]}
@@ -845,6 +845,11 @@ function qlOpen(){["we","ws","wr","wk","cm","ck"].forEach(i=>{$(i).value=""});$(
 function qlClose(){$("ql").classList.add("hide")}
 $("qlm").onclick=e=>{const q=e.target.dataset.q;if(q)qlMode(q)};
 $("ql").addEventListener("click",e=>{if(e.target.id==="ql"||e.target.closest("#qlx"))qlClose()});
+// keep logged sets in sync with edited reps/weight
+function syncDone(s){snap();Object.keys(s.done).forEach(k=>{const en=S.w.find(w=>w.id===s.done[k]);if(!en)return;const r=parseInt(s.v["r"+k]),kg=parseFloat(s.v["k"+k]);if(r>0)en.r=r;if(!isNaN(kg)&&kg>=0)en.kg=kg})}
+$("ov").addEventListener("input",e=>{const v=e.target.dataset&&e.target.dataset.v,s=S.sess,m=v&&/^([kr])(\d+_\d+)$/.exec(v);if(!m||!s)return;s.v[v]=e.target.value;
+ const id=s.done[m[2]],en=id!==undefined&&S.w.find(w=>w.id===id);if(!en)return;
+ if(m[1]==="r"){const r=parseInt(e.target.value);if(r>0)en.r=r}else{const kg=parseFloat(e.target.value);if(!isNaN(kg)&&kg>=0)en.kg=kg}save()});
 if(S.sess)setTimeout(openOv,0);
 function render(){fillDb();fillSp();renderTrain();renderFood();renderStats();renderProf();renderProg();renderSug();renderRecs();renderHome();renderHistTab();renderWeek();renderInstall();renderPush()}
 $("lang").value=LANG;
